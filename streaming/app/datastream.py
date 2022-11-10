@@ -55,10 +55,10 @@ class DataStream(object):
         """
 
         if not isinstance(map_function, operations.MapFunction):
-            raise TypeError(f'{map_function.__name__} is '
+            raise TypeError(f'{map_function} is '
                 f'not type {operations.MapFunction.__name__}')
 
-        self.pipeline.append(map_function)
+        self.transformations.append(map_function)
 
         return self
     
@@ -72,19 +72,19 @@ class DataStream(object):
             DataStream: datastream self
         """
         if not isinstance(filter_function, operations.FilterFunction):
-            raise TypeError(f'{filter_function.__name__} is '
+            raise TypeError(f'{filter_function} is '
                 f'not type {operations.FilterFunction.__name__}')
 
-        self.pipeline.append(filter_function)
+        self.transformations.append(filter_function)
 
         return self
     
     def execute(self):
-        """ execute datastream pipeline """
+        """ execute datastream transformations """
         for event in self.source.generate():
             data = event
 
-            for process in self.pipeline:
+            for process in self.transformations:
                 data = process(data)
 
             self.sink.pipe(data)
