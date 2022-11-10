@@ -7,16 +7,17 @@ from streaming.sinks import StdoutSink
 import streaming.operations as operations
 
 class Map(operations.MapFunction):
+    """ example map function """
     def map(self, event):
         return super().map(event)
 
 class Filter(operations.FilterFunction):
+    """ example filter function """
     def filter(self, event):
         return super().filter(event)
 
 @pytest.fixture(scope='function')
 def datastream():
-    print('creating ds')
     return DataStream()
 
 def test_add_source(datastream):
