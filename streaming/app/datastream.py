@@ -1,12 +1,14 @@
 import logging
 
+import streaming.operations as operations
+
 from streaming.sources import CollectionSource
 from streaming.sinks import StdoutSink
 
 logger = logging.getLogger(__name__)
 
 class DataStream(object):
-    pipeline = []
+    transformations = []
 
     def __init__(self, source=None, sink=None):
         """ DataStream class
@@ -42,16 +44,39 @@ class DataStream(object):
         """
         self.sink = sink
     
-    def map(self, func):
+    def map(self, map_function):
         """ add mapper
 
         Args:
-            func (function): mapping function
+            map_function (MapFunction): mapping function class
 
         Returns:
             DataStream: datastream self
         """
-        self.pipeline.append(func)
+
+        if not isinstance(map_function, operations.MapFunction):
+            raise TypeError(f'{map_function.__name__} is '
+                f'not type {operations.MapFunction.__name__}')
+
+        self.pipeline.append(map_function)
+
+        return self
+    
+    def filter(self, filter_function):
+        """ add filter function
+
+        Args:
+            filter_function (FilterFunction): filter function
+
+        Returns:
+            DataStream: datastream self
+        """
+        if not isinstance(filter_function, operations.FilterFunction):
+            raise TypeError(f'{filter_function.__name__} is '
+                f'not type {operations.FilterFunction.__name__}')
+
+        self.pipeline.append(filter_function)
+
         return self
     
     def execute(self):
