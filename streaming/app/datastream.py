@@ -7,9 +7,11 @@ from streaming.sinks import StdoutSink
 
 logger = logging.getLogger(__name__)
 
-class DataStream(object):
-    transformations = []
+class DataStreamException(Exception):
+    """ DataStream error """
+    pass
 
+class DataStream(object):
     def __init__(self, source=None, sink=None):
         """ DataStream class
 
@@ -17,6 +19,7 @@ class DataStream(object):
             source (Source, optional): datastream source. Defaults to None.
             sink (Sink, optional): datastream sink. Defaults to None.
         """
+        self.transformations = []
         self.source = source
         self.sink = sink
     
@@ -78,13 +81,28 @@ class DataStream(object):
         self.transformations.append(filter_function)
 
         return self
-    
+
     def execute(self):
         """ execute datastream transformations """
+        if not self.source:
+            raise DataStreamException('DataStream source not defined')
+        
+        if not self.sink:
+            raise DataStreamException('DataStream sink not definied')
+
         for event in self.source.generate():
             data = event
 
-            for process in self.transformations:
-                data = process(data)
+            for process in self.transformations:                
+                if process.type == operations.FilterFunction.__name__:
+                    if process(data):
+                        data = data
+                    else:
+                        data = None
+                        break
+                  
+                if process.type == operations.MapFunction.__name__:
+                    data = process(data)
 
-            self.sink.pipe(data)
+            if data:
+                self.sink.pipe(data)

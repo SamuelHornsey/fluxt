@@ -4,10 +4,17 @@ class FilterFunction(ABC):
     """ filter function class """
 
     def __init__(self):
+        """ init filter function """
         pass
     
     def __call__(self, event):
+        """ call filter function """
         return self.filter(event)
+    
+    @property
+    def type(self):
+        """ return the operation type """
+        return self.__class__.__base__.__name__
 
     @abstractmethod
     def filter(self, event):
@@ -17,6 +24,6 @@ class FilterFunction(ABC):
             event (object): event object
 
         Returns:
-            object: event object
+            boolean: bool if event should be returned
         """
-        return event
+        return True

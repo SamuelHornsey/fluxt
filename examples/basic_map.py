@@ -11,13 +11,16 @@ class MapProcessor(MapFunction):
 class FilterProcessor(FilterFunction):
     def filter(self, event):
         if 'event' in event:
-            return event
+            return True
     
-        return None
+        return False
 
 @app.stream()
 def stream_processor(data_stream):
-    data_stream.source_from_collection(['event1', 'event2', 'event3', 'bad'])
+    events = ['event1', 'event2', 'event3', 'bad']
+    print(f'input events = {events}')
+
+    data_stream.source_from_collection(events)
 
     map_p = MapProcessor()
     filter_p = FilterProcessor()

@@ -16,37 +16,61 @@ class Filter(operations.FilterFunction):
     def filter(self, event):
         return super().filter(event)
 
-@pytest.fixture(scope='function')
-def datastream():
-    return DataStream()
-
-def test_add_source(datastream):
+def test_add_source():
+    datastream = DataStream()
     datastream.add_source('source')
     assert datastream.source == 'source'
 
-def test_add_sink(datastream):
+def test_add_sink():
+    datastream = DataStream()
     datastream.add_sink('sink')
     assert datastream.sink == 'sink'
 
-def test_source_from_collection(datastream):
+def test_source_from_collection():
+    datastream = DataStream()
     datastream.source_from_collection([1, 2, 3])
     assert isinstance(datastream.source, CollectionSource)
 
-def test_print(datastream):
+def test_print():
+    datastream = DataStream()
     datastream.print()
     assert isinstance(datastream.sink, StdoutSink)
 
-def test_map(datastream):
+def test_map():
+    datastream = DataStream()
     datastream.map(Map())
     assert len(datastream.transformations) == 1
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as e:
         datastream.map(Filter())
 
-def test_filter(datastream):
+    assert "is not type MapFunction" in str(e)
+
+def test_filter():
+    datastream = DataStream()
     datastream.filter(Filter())
-    assert len(datastream.transformations) == 2
+    assert len(datastream.transformations) == 1
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as e:
         datastream.filter(Map())
+      
+    assert "is not type FilterFunction" in str(e)
 
+def test_execute(monkeypatch):
+    agg = []
+    def mock_pipe_capture(event):
+        agg.append(event)
+
+    ds = DataStream()
+
+    ds.source_from_collection([1,2,3])
+    ds.print()
+
+    monkeypatch.setattr(ds.sink, 'pipe', mock_pipe_capture)
+
+    ds.filter(Filter()) \
+        .map(Map())
+
+    ds.execute()
+
+    assert agg == [1,2,3]

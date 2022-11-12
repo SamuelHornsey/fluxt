@@ -11,6 +11,16 @@ def test_repr(app):
 
 def test_stream(app):
     @app.stream()
-    def stream(event):
-        pass
+    def stream(ds):
+        ds.source_from_collection([1,2,3])
+        ds.print()
+    
+    assert len(app.agents) == 1
   
+def test_run(app):
+    @app.stream()
+    def stream(ds):
+        ds.source_from_collection([1,2,3])
+        ds.print()
+    
+    app.run()

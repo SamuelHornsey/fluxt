@@ -3,3 +3,5 @@ __pycache__
 notes.md
 .pytest_cache
 .vscode
+.coverage
+htmlcov
