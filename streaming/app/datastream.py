@@ -2,6 +2,7 @@ import logging
 
 import streaming.operations as operations
 
+from streaming.app.graph import graph_generator
 from streaming.sources import CollectionSource
 from streaming.sinks import StdoutSink
 
@@ -92,19 +93,12 @@ class DataStream(object):
         if not self.sink:
             raise DataStreamException('DataStream sink not defined')
 
+        execution_graph = graph_generator(self.transformations)
+
         for event in self.source.generate():
             data = event
 
-            for process in self.transformations:
-                if process.type == operations.FilterFunction.__name__:
-                    if process(data):
-                        data = data
-                    else:
-                        data = None
-                        break
-
-                if process.type == operations.MapFunction.__name__:
-                    data = process(data)
+            data = execution_graph.run(event)
 
             if data:
                 self.sink.pipe(data)

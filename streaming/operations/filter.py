@@ -10,7 +10,10 @@ class FilterFunction(ABC):
 
     def __call__(self, event):
         """ call filter function """
-        return self.filter(event)
+        if self.filter(event):
+            return event
+
+        return None
 
     @property
     def type(self):
