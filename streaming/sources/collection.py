@@ -1,5 +1,6 @@
 from streaming.sources.base import Source
 
+
 class CollectionSource(Source):
     def __init__(self, collection):
         """ init collection source """

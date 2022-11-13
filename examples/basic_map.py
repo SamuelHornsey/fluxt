@@ -12,7 +12,7 @@ class FilterProcessor(FilterFunction):
     def filter(self, event):
         if 'event' in event:
             return True
-    
+
         return False
 
 @app.stream()

@@ -1,5 +1,6 @@
 from streaming.app.datastream import DataStream
 
+
 class App(object):
     """ Streaming App Container """
     agents = []
@@ -9,19 +10,19 @@ class App(object):
 
     def __repr__(self):
         return f'App(name="{self.name}")'
-    
+
     def stream(self, *args, **kwargs):
         """ add stream agent """
         def inner(func):
             self.agents.append(func)
             return func
         return inner
-    
+
     def run(self):
         """ run streaming app """
-        ds = DataStream()
+        datastream = DataStream()
 
         for agent in self.agents:
-            agent(ds)
+            agent(datastream)
 
-        ds.execute()
+        datastream.execute()

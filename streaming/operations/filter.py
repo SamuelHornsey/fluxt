@@ -1,16 +1,17 @@
 from abc import ABC, abstractmethod
 
+
 class FilterFunction(ABC):
     """ filter function class """
 
     def __init__(self):
         """ init filter function """
         pass
-    
+
     def __call__(self, event):
         """ call filter function """
         return self.filter(event)
-    
+
     @property
     def type(self):
         """ return the operation type """
