@@ -26,15 +26,35 @@ class StreamGraph(object):
         """ init graph """
         self.head = None
 
+    def __iter__(self):
+        """ iterator for graph nodes
+
+        Returns:
+            StreamGrapgh: stream graph self
+        """
+        self.current = self.head
+        return self
+
+    def __next__(self):
+        """ loop through nodes
+
+        Raises:
+            StopIteration: when all nodes are listed
+
+        Returns:
+            OperationNode: operation node
+        """
+        while self.current is not None:
+            node = self.current
+            self.current = self.current.next
+
+            return node
+
+        raise StopIteration
+
     def __repr__(self):
         """ print graph """
-        nodes = []
-        current = self.head
-
-        while current is not None:
-            nodes.append(f'{current.operation.type}()')
-            current = current.next
-
+        nodes = [f'{node.operation.type}()' for node in self]
         return f'StreamGraph({"->".join(nodes)})'
 
     def add_node(self, operation):
@@ -43,18 +63,18 @@ class StreamGraph(object):
         Args:
             operation (object): operation node
         """
-        node = OperationNode(operation)
+        new_node = OperationNode(operation)
 
         if not self.head:
-            self.head = node
+            self.head = new_node
             return
 
-        current = self.head
+        last = None
 
-        while current.next:
-            current = current.next
+        for node in self:
+            last = node
 
-        current.next = node
+        last.next = new_node
 
     def run(self, event):
         """ run graph
@@ -62,15 +82,11 @@ class StreamGraph(object):
         Args:
             event (event): event object
         """
-        current = self.head
-
-        while current.next:
-            event = current.process(event)
+        for node in self:
+            event = node.process(event)
 
             if not event:
                 break
-
-            current = current.next
 
         return event
 
@@ -84,4 +100,5 @@ class OperationNode(object):
         self.next = None
 
     def process(self, event):
+        """ run operation over event """
         return self.operation(event)

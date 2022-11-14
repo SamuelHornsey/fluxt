@@ -1,8 +1,9 @@
 from streaming.app import App
 from streaming.operations import MapFunction, FilterFunction
+from streaming.sources import KafkaSource
 
 # create a streaming app
-app = App(name='My Stream Processor')
+app = App(name='My Kafka Stream Processor')
 
 class MapProcessor(MapFunction):
     def map(self, event):
@@ -17,12 +18,12 @@ class FilterProcessor(FilterFunction):
 
 @app.stream()
 def stream_processor(data_stream):
-    events = ['event1', 'event2', 'event3', 'bad']
-    print(f'input events = {events}')
+    data_stream.add_source(KafkaSource('foobar', bootstrap_servers='127.0.0.1:9092'))
 
-    data_stream.source_from_collection(events)
+    map_p = MapProcessor()
+    filter_p = FilterProcessor()
 
-    data_stream.filter(FilterProcessor()) \
-          .map(MapProcessor())
+    data_stream.filter(filter_p) \
+          .map(map_p)
 
     data_stream.print()

@@ -22,6 +22,21 @@ def test_stream_graph_repr():
     assert graph.__repr__() == 'StreamGraph(FilterFunction()->MapFunction())'
 
 
+def test_stream_graph_iter():
+    graph = graph_generator([Filter(), Map()])
+
+    nodes = [node for node in graph]
+
+    assert len(nodes) == 2
+    assert nodes[0].operation.type == 'FilterFunction'
+    assert nodes[1].operation.type == 'MapFunction'
+
+    graph = graph_generator([Filter(), Map(), Map()])
+    nodes = [node for node in graph]
+
+    assert len(nodes) == 3
+
+
 def test_stream_graph_add_node():
     graph = StreamGraph()
     graph.add_node(Filter())
@@ -38,7 +53,9 @@ def test_stream_graph_run():
     event = {'test': 'event'}
     graph = graph_generator([Map(), Filter()])
 
-    graph.run(event)
+    processed_event = graph.run(event)
+
+    assert processed_event == event
 
 
 def test_operation_node_process():
