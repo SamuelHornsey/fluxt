@@ -21,6 +21,13 @@ class Filter(operations.FilterFunction):
         return super().filter(event)
 
 
+class FlatMap(operations.FlatMapFunction):
+    """ example flat map function """
+
+    def flat_map(self, event):
+        return super().flat_map(event)
+
+
 def test_add_source():
     datastream = DataStream()
     datastream.add_source('source')
@@ -65,6 +72,17 @@ def test_filter():
         datastream.filter(Map())
 
     assert "is not type FilterFunction" in str(e)
+
+
+def test_flat_map():
+    datastream = DataStream()
+    datastream.flat_map(FlatMap())
+    assert len(datastream.transformations) == 1
+
+    with pytest.raises(TypeError) as e:
+        datastream.flat_map(Map())
+
+    assert "is not type FlatMapFunction" in str(e)
 
 
 def test_execute_no_source():

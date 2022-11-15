@@ -9,7 +9,7 @@ def graph_generator(transformations):
         transformations (list): list of transformations
 
     Returns:
-        StreamGraph: a streaming graph pipeline
+        graph (StreamGraph): a streaming graph pipeline
     """
     if not transformations:
         raise GraphException('no transformations defined')
@@ -33,7 +33,7 @@ class StreamGraph(object):
         """ iterator for graph nodes
 
         Returns:
-            StreamGrapgh: stream graph self
+            self (StreamGraph): stream graph self
         """
         self.current = self.head
         return self
@@ -45,7 +45,7 @@ class StreamGraph(object):
             StopIteration: when all nodes are listed
 
         Returns:
-            OperationNode: operation node
+            node (OperationNode): operation node
         """
         while self.current is not None:
             node = self.current
@@ -80,7 +80,8 @@ class StreamGraph(object):
         last.next = new_node
 
     def run(self, event):
-        """ run graph
+        """ run graph by looping through each node and
+            processing the event collection
 
         Args:
             event (event): event object

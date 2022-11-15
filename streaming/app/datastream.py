@@ -57,7 +57,7 @@ class DataStream(object):
             map_function (MapFunction): mapping function class
 
         Returns:
-            DataStream: datastream self
+            datastream (DataStream): datastream self
         """
 
         if not isinstance(map_function, operations.MapFunction):
@@ -75,7 +75,7 @@ class DataStream(object):
             filter_function (FilterFunction): filter function
 
         Returns:
-            DataStream: datastream self
+            datastream (DataStream): datastream self
         """
         if not isinstance(filter_function, operations.FilterFunction):
             raise TypeError(f'{filter_function} is '
@@ -95,7 +95,7 @@ class DataStream(object):
             TypeError: if function is not a flat map
 
         Returns:
-            DataStream: datastream self
+            datastream (DataStream): datastream self
         """
         if not isinstance(flat_map_function, operations.FlatMapFunction):
             raise TypeError(f'{flat_map_function} is '
@@ -117,6 +117,4 @@ class DataStream(object):
 
         for event in self.source.generate():
             data = execution_graph.run(event)
-
-            # if data:
             self.sink.pipe(data)
