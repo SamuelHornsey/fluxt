@@ -4,6 +4,7 @@ from streaming.sinks.base import Sink
 
 
 class StdoutSink(Sink):
-    def pipe(self, event):
+    def pipe(self, event_collection):
         """ send event to stdout """
-        sys.stdout.write('%s\n' % event)
+        for event in event_collection:
+            sys.stdout.write('%s\n' % event)

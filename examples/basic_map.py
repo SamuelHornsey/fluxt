@@ -16,13 +16,13 @@ class FilterProcessor(FilterFunction):
         return False
 
 @app.stream()
-def stream_processor(data_stream):
+def stream_processor(datastream):
     events = ['event1', 'event2', 'event3', 'bad']
     print(f'input events = {events}')
 
-    data_stream.source_from_collection(events)
+    datastream.source_from_collection(events)
 
-    data_stream.filter(FilterProcessor()) \
+    datastream.filter(FilterProcessor()) \
           .map(MapProcessor())
 
-    data_stream.print()
+    datastream.print()

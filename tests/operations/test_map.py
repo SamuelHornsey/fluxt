@@ -12,6 +12,13 @@ class BadMapFunction(MapFunction):
     pass
 
 
+def test_map_call():
+    test_map = GoodMapFunction()
+    event_collection = test_map([1, 2, 3])
+
+    assert event_collection == [1, 2, 3]
+
+
 def test_map_type():
     test_map = GoodMapFunction()
     assert test_map.type == 'MapFunction'

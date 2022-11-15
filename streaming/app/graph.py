@@ -7,6 +7,9 @@ def graph_generator(transformations):
 
     Args:
         transformations (list): list of transformations
+
+    Returns:
+        StreamGraph: a streaming graph pipeline
     """
     if not transformations:
         raise GraphException('no transformations defined')
@@ -82,13 +85,15 @@ class StreamGraph(object):
         Args:
             event (event): event object
         """
-        for node in self:
-            event = node.process(event)
+        event_collection = [event]
 
-            if not event:
+        for node in self:
+            event_collection = node.process(event_collection)
+
+            if not event_collection:
                 break
 
-        return event
+        return event_collection
 
 
 class OperationNode(object):
@@ -99,6 +104,6 @@ class OperationNode(object):
         self.operation = operation
         self.next = None
 
-    def process(self, event):
+    def process(self, event_collection):
         """ run operation over event """
-        return self.operation(event)
+        return self.operation(event_collection)

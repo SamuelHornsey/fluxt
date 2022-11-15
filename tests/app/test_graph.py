@@ -53,14 +53,17 @@ def test_stream_graph_run():
     event = {'test': 'event'}
     graph = graph_generator([Map(), Filter()])
 
-    processed_event = graph.run(event)
+    event_collection = graph.run(event)
 
-    assert processed_event == event
+    assert len(event_collection) == 1
+    assert event_collection[0] == event
 
 
 def test_operation_node_process():
     node = OperationNode(Map())
-    event = {'test': 'event'}
+    event_collection = [{'test': 'event'}]
 
-    result = node.process(event)
-    assert result == event
+    results = node.process(event_collection)
+
+    assert len(results) == 1
+    assert results[0] == event_collection[0]

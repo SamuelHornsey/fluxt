@@ -85,6 +85,26 @@ class DataStream(object):
 
         return self
 
+    def flat_map(self, flat_map_function):
+        """ add flat map function
+
+        Args:
+            flat_map_function (FlatMapFunction): flat map function
+
+        Raises:
+            TypeError: if function is not a flat map
+
+        Returns:
+            DataStream: datastream self
+        """
+        if not isinstance(flat_map_function, operations.FlatMapFunction):
+            raise TypeError(f'{flat_map_function} is '
+                            f'not type {operations.FlatMapFunction.__name__}')
+
+        self.transformations.append(flat_map_function)
+
+        return self
+
     def execute(self):
         """ execute datastream transformations """
         if not self.source:
@@ -96,9 +116,7 @@ class DataStream(object):
         execution_graph = graph_generator(self.transformations)
 
         for event in self.source.generate():
-            data = event
-
             data = execution_graph.run(event)
 
-            if data:
-                self.sink.pipe(data)
+            # if data:
+            self.sink.pipe(data)

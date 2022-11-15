@@ -90,8 +90,9 @@ def test_execute_no_sink():
 def test_execute(monkeypatch):
     agg = []
 
-    def mock_pipe_capture(event):
-        agg.append(event)
+    def mock_pipe_capture(event_collection):
+        for event in event_collection:
+            agg.append(event)
 
     ds = DataStream()
 

@@ -8,12 +8,21 @@ class FilterFunction(ABC):
         """ init filter function """
         pass
 
-    def __call__(self, event):
-        """ call filter function """
-        if self.filter(event):
-            return event
+    def __call__(self, event_collection):
+        """_summary_
 
-        return None
+        Args:
+            event_collection (list): list of events
+
+        Returns:
+            event_collection: list of events
+        """
+        results = []
+        for event in event_collection:
+            if self.filter(event):
+                results.append(event)
+
+        return results
 
     @property
     def type(self):

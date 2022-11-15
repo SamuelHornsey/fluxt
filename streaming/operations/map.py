@@ -8,9 +8,9 @@ class MapFunction(ABC):
         """ init map function """
         pass
 
-    def __call__(self, event):
+    def __call__(self, event_collection):
         """ call map function """
-        return self.map(event)
+        return [self.map(event) for event in event_collection]
 
     @property
     def type(self):
