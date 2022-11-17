@@ -1,12 +1,10 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from streaming.operations.base import Operation
 
 
-class MapFunction(ABC):
+class MapFunction(Operation):
     """ map function class """
-
-    def __init__(self):
-        """ init map function """
-        pass
 
     def __call__(self, event_collection):
         """ call map function """

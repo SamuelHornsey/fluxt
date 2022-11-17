@@ -8,6 +8,11 @@ class GoodMapFunction(MapFunction):
         return event
 
 
+class KeyedMapFunction(MapFunction):
+    def map(self, event):
+        return self.keyed_event(event, 1)
+
+
 class BadMapFunction(MapFunction):
     pass
 
@@ -29,6 +34,13 @@ def test_map_function():
     event = test_map.map({'event': 'data'})
 
     assert event == {'event': 'data'}
+
+
+def test_map_function_keyed():
+    test_map = KeyedMapFunction()
+    event = test_map.map('word')
+
+    assert event == ('word', 1)
 
 
 def test_map_function_abstract():

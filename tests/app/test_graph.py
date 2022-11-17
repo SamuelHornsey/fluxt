@@ -1,5 +1,8 @@
+import pytest
+
 from streaming.app.graph import OperationNode, StreamGraph, graph_generator
-from streaming.operations import FilterFunction, MapFunction
+from streaming.operations import FilterFunction, MapFunction, ReducerFunction
+from streaming.storage import Memory
 
 
 class Map(MapFunction):
@@ -12,18 +15,28 @@ class Filter(FilterFunction):
         return super().filter(event)
 
 
-def test_stream_graph_generator():
-    graph = graph_generator([Filter(), Map()])
+class Reducer(ReducerFunction):
+    def reduce(self, accumalator, event):
+        pass
+
+
+@pytest.fixture()
+def storage():
+    return Memory()
+
+
+def test_stream_graph_generator(storage):
+    graph = graph_generator([Filter(), Map()], storage)
     assert isinstance(graph, StreamGraph)
 
 
-def test_stream_graph_repr():
-    graph = graph_generator([Filter(), Map()])
+def test_stream_graph_repr(storage):
+    graph = graph_generator([Filter(), Map()], storage)
     assert graph.__repr__() == 'StreamGraph(FilterFunction()->MapFunction())'
 
 
-def test_stream_graph_iter():
-    graph = graph_generator([Filter(), Map()])
+def test_stream_graph_iter(storage):
+    graph = graph_generator([Filter(), Map()], storage)
 
     nodes = [node for node in graph]
 
@@ -31,14 +44,14 @@ def test_stream_graph_iter():
     assert nodes[0].operation.type == 'FilterFunction'
     assert nodes[1].operation.type == 'MapFunction'
 
-    graph = graph_generator([Filter(), Map(), Map()])
+    graph = graph_generator([Filter(), Map(), Map()], storage)
     nodes = [node for node in graph]
 
     assert len(nodes) == 3
 
 
-def test_stream_graph_add_node():
-    graph = StreamGraph()
+def test_stream_graph_add_node(storage):
+    graph = StreamGraph(storage)
     graph.add_node(Filter())
 
     assert graph.head
@@ -49,9 +62,9 @@ def test_stream_graph_add_node():
     assert graph.head.next
 
 
-def test_stream_graph_run():
+def test_stream_graph_run(storage):
     event = {'test': 'event'}
-    graph = graph_generator([Map(), Filter()])
+    graph = graph_generator([Map(), Filter()], storage)
 
     event_collection = graph.run(event)
 

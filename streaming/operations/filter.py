@@ -1,12 +1,10 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from streaming.operations.base import Operation
 
 
-class FilterFunction(ABC):
+class FilterFunction(Operation):
     """ filter function class """
-
-    def __init__(self):
-        """ init filter function """
-        pass
 
     def __call__(self, event_collection):
         """_summary_

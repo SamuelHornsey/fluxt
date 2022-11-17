@@ -2,7 +2,7 @@ class GraphException(Exception):
     pass
 
 
-def graph_generator(transformations):
+def graph_generator(transformations, storage):
     """ generate a stream execution graph
 
     Args:
@@ -14,7 +14,7 @@ def graph_generator(transformations):
     if not transformations:
         raise GraphException('no transformations defined')
 
-    graph = StreamGraph()
+    graph = StreamGraph(storage)
 
     for operation in transformations:
         graph.add_node(operation)
@@ -25,9 +25,10 @@ def graph_generator(transformations):
 class StreamGraph(object):
     """ represent the streaming process graph """
 
-    def __init__(self):
+    def __init__(self, storage):
         """ init graph """
         self.head = None
+        self.storage = storage
 
     def __iter__(self):
         """ iterator for graph nodes
@@ -67,6 +68,9 @@ class StreamGraph(object):
             operation (object): operation node
         """
         new_node = OperationNode(operation)
+
+        # set storage backend
+        new_node.operation.storage = self.storage
 
         if not self.head:
             self.head = new_node

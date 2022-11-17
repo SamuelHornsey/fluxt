@@ -15,7 +15,7 @@ class DataStreamException(Exception):
 
 
 class DataStream(object):
-    def __init__(self, source=None, sink=None):
+    def __init__(self, source=None, sink=None, storage=None):
         """ DataStream class
 
         Args:
@@ -25,6 +25,7 @@ class DataStream(object):
         self.transformations = []
         self.source = source
         self.sink = sink
+        self.storage = storage
 
     def source_from_collection(self, collection):
         """ source from collection type """
@@ -105,6 +106,26 @@ class DataStream(object):
 
         return self
 
+    def reduce(self, reduce_function):
+        """ add reducer functions
+
+        Args:
+            reduce_function (ReducerFunction): reducer function
+
+        Raises:
+            TypeError: if function is not reducer
+
+        Returns:
+            datastream (DataStream): datastream self
+        """
+        if not isinstance(reduce_function, operations.ReducerFunction):
+            raise TypeError(f'{reduce_function} is '
+                            f'not type {operations.ReducerFunction.__name__}')
+
+        self.transformations.append(reduce_function)
+
+        return self
+
     def execute(self):
         """ execute datastream transformations """
         if not self.source:
@@ -113,7 +134,7 @@ class DataStream(object):
         if not self.sink:
             raise DataStreamException('DataStream sink not defined')
 
-        execution_graph = graph_generator(self.transformations)
+        execution_graph = graph_generator(self.transformations, self.storage)
 
         for event in self.source.generate():
             data = execution_graph.run(event)

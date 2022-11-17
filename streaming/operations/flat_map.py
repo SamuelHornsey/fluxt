@@ -1,12 +1,10 @@
 from abc import ABC, abstractmethod
 
+from streaming.operations.base import Operation
 
-class FlatMapFunction(ABC):
+
+class FlatMapFunction(Operation):
     """ flat map function class """
-
-    def __init__(self):
-        """ init flat map function """
-        pass
 
     def __call__(self, event_collection):
         """ call flat map function """
