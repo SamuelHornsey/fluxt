@@ -7,7 +7,14 @@ class ReducerFunction(Operation):
     """ reducer function class """
 
     def process_batch(self, events):
-        """ call reducer """
+        """ passes a batch of events to reduce
+
+        Args:
+            events (list): list of events
+
+        Returns:
+            batch (list): list of modified events
+        """
         batch = []
         for event in events:
             key, value = event

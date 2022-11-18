@@ -7,7 +7,14 @@ class MapFunction(Operation):
     """ map function class """
 
     def process_batch(self, events):
-        """ call map function """
+        """ passes a batch of events to map
+
+        Args:
+            events (list): list of events
+
+        Returns:
+            batch (list): list of modified events
+        """
         return [self.map(event) for event in events]
 
     @property

@@ -1,5 +1,6 @@
 from streaming.app.events import EventCollection
 
+
 class GraphException(Exception):
     pass
 

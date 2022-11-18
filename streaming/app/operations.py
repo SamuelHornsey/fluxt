@@ -2,6 +2,7 @@ import streaming.operations as operations
 
 from streaming.operations.base import Operation
 
+
 class DataStreamOperations:
     def pipeline(self, *args):
         """ create an operation pipeline """
@@ -9,7 +10,7 @@ class DataStreamOperations:
             if not isinstance(operation, Operation):
                 raise TypeError(f'{operation} is '
                                 f'not type {Operation.__name__}')
-            
+
             self.transformations.append(operation)
 
         return self

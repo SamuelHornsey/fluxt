@@ -8,3 +8,4 @@ htmlcov
 utils
 .DS_Store
 scratch
+*.db

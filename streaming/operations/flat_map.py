@@ -7,7 +7,14 @@ class FlatMapFunction(Operation):
     """ flat map function class """
 
     def process_batch(self, events):
-        """ call flat map function """
+        """ passes a batch of events to flat map
+
+        Args:
+            events (list): list of events
+
+        Returns:
+            batch (list): list of modified events
+        """
         batch = []
         for event in events:
             batch += self.flat_map(event)

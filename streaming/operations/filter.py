@@ -7,6 +7,14 @@ class FilterFunction(Operation):
     """ filter function class """
 
     def process_batch(self, events):
+        """ passes a batch of events to filter
+
+        Args:
+            events (list): list of events
+
+        Returns:
+            batch (list): list of modified events
+        """
         batch = []
         for event in events:
             if self.filter(event):

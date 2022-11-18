@@ -28,6 +28,15 @@ class FlatMap(operations.FlatMapFunction):
         return super().flat_map(event)
 
 
+class Reduce(operations.ReducerFunction):
+    """ example reducer function """
+
+    def reduce(self, key, reduced, event):
+        if not reduced:
+            return event
+        return event + reduced
+
+
 def test_add_source():
     datastream = DataStream()
     datastream.add_source('source')
@@ -83,6 +92,29 @@ def test_flat_map():
         datastream.flat_map(Map())
 
     assert "is not type FlatMapFunction" in str(e)
+
+
+def test_reduce():
+    datastream = DataStream()
+    datastream.reduce(Reduce())
+    assert len(datastream.transformations) == 1
+
+    with pytest.raises(TypeError) as e:
+        datastream.reduce(FlatMap())
+
+    assert "is not type ReducerFunction" in str(e)
+
+
+def test_pipeline():
+    datastream = DataStream()
+    datastream.pipeline(Map(), Filter(), Reduce())
+
+    assert len(datastream.transformations) == 3
+
+    with pytest.raises(TypeError) as e:
+        datastream.pipeline(None, 'test')
+
+    assert "is not type Operation" in str(e)
 
 
 def test_execute_no_source():

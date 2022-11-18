@@ -4,9 +4,10 @@ from abc import ABC, abstractmethod
 class Operation(ABC):
     """ base operation """
 
-    def __init__(self):
+    def __init__(self, handler_func=None):
         """ base operation init """
         self.storage_backend = None
+        self.handler_func = handler_func
 
     def __call__(self, event_collection):
         """_summary_

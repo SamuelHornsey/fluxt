@@ -16,7 +16,7 @@ class BadFilterFunction(FilterFunction):
 def test_filter_call():
     filter_function = GoodFilterFunction()
     event_collection = EventCollection(None)
-    event_collection.events = [1,2,3]
+    event_collection.events = [1, 2, 3]
     event_collection = filter_function(event_collection)
 
     assert event_collection.events == [1, 2, 3]
