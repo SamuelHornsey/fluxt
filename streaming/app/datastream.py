@@ -1,7 +1,7 @@
 import logging
 
-import streaming.operations as operations
-
+from streaming.app.operations import DataStreamOperations
+from streaming.app.events import EventCollection
 from streaming.app.graph import graph_generator
 from streaming.sources import CollectionSource
 from streaming.sinks import StdoutSink
@@ -14,7 +14,7 @@ class DataStreamException(Exception):
     pass
 
 
-class DataStream(object):
+class DataStream(DataStreamOperations):
     def __init__(self, source=None, sink=None, storage=None):
         """ DataStream class
 
@@ -51,81 +51,6 @@ class DataStream(object):
         """
         self.sink = sink
 
-    def map(self, map_function):
-        """ add mapper
-
-        Args:
-            map_function (MapFunction): mapping function class
-
-        Returns:
-            datastream (DataStream): datastream self
-        """
-
-        if not isinstance(map_function, operations.MapFunction):
-            raise TypeError(f'{map_function} is '
-                            f'not type {operations.MapFunction.__name__}')
-
-        self.transformations.append(map_function)
-
-        return self
-
-    def filter(self, filter_function):
-        """ add filter function
-
-        Args:
-            filter_function (FilterFunction): filter function
-
-        Returns:
-            datastream (DataStream): datastream self
-        """
-        if not isinstance(filter_function, operations.FilterFunction):
-            raise TypeError(f'{filter_function} is '
-                            f'not type {operations.FilterFunction.__name__}')
-
-        self.transformations.append(filter_function)
-
-        return self
-
-    def flat_map(self, flat_map_function):
-        """ add flat map function
-
-        Args:
-            flat_map_function (FlatMapFunction): flat map function
-
-        Raises:
-            TypeError: if function is not a flat map
-
-        Returns:
-            datastream (DataStream): datastream self
-        """
-        if not isinstance(flat_map_function, operations.FlatMapFunction):
-            raise TypeError(f'{flat_map_function} is '
-                            f'not type {operations.FlatMapFunction.__name__}')
-
-        self.transformations.append(flat_map_function)
-
-        return self
-
-    def reduce(self, reduce_function):
-        """ add reducer functions
-
-        Args:
-            reduce_function (ReducerFunction): reducer function
-
-        Raises:
-            TypeError: if function is not reducer
-
-        Returns:
-            datastream (DataStream): datastream self
-        """
-        if not isinstance(reduce_function, operations.ReducerFunction):
-            raise TypeError(f'{reduce_function} is '
-                            f'not type {operations.ReducerFunction.__name__}')
-
-        self.transformations.append(reduce_function)
-
-        return self
-
     def execute(self):
         """ execute datastream transformations """
         if not self.source:
@@ -137,5 +62,5 @@ class DataStream(object):
         execution_graph = graph_generator(self.transformations, self.storage)
 
         for event in self.source.generate():
-            data = execution_graph.run(event)
-            self.sink.pipe(data)
+            event_collection = execution_graph.run(EventCollection(event))
+            self.sink.pipe(event_collection)

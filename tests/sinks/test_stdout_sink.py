@@ -1,10 +1,12 @@
 from streaming.sinks import StdoutSink
 
+from streaming.app.events import EventCollection
+
 
 def test_stdout_sink(capsys):
     stdout = StdoutSink()
-    event_collection = [{'test': 'event'}]
+    event_collection = EventCollection({'test': 'event'})
     stdout.pipe(event_collection)
     out, err = capsys.readouterr()
 
-    assert str(event_collection[0]) in out
+    assert str(event_collection.events[0]) in out

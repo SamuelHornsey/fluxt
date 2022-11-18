@@ -2,6 +2,7 @@ import pytest
 
 from streaming.app.graph import OperationNode, StreamGraph, graph_generator
 from streaming.operations import FilterFunction, MapFunction, ReducerFunction
+from streaming.app.events import EventCollection
 from streaming.storage import Memory
 
 
@@ -66,17 +67,17 @@ def test_stream_graph_run(storage):
     event = {'test': 'event'}
     graph = graph_generator([Map(), Filter()], storage)
 
-    event_collection = graph.run(event)
+    event_collection = graph.run(EventCollection(event))
 
-    assert len(event_collection) == 1
-    assert event_collection[0] == event
+    assert len(event_collection.events) == 1
+    assert event_collection.events[0] == event
 
 
 def test_operation_node_process():
     node = OperationNode(Map())
-    event_collection = [{'test': 'event'}]
+    event = {'test': 'event'}
 
-    results = node.process(event_collection)
+    results = node.process(EventCollection(event))
 
-    assert len(results) == 1
-    assert results[0] == event_collection[0]
+    assert isinstance(results, EventCollection)
+    assert results.event_collection == [event]

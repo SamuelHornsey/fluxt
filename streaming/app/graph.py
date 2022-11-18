@@ -1,3 +1,5 @@
+from streaming.app.events import EventCollection
+
 class GraphException(Exception):
     pass
 
@@ -83,15 +85,13 @@ class StreamGraph(object):
 
         last.next = new_node
 
-    def run(self, event):
+    def run(self, event_collection):
         """ run graph by looping through each node and
             processing the event collection
 
         Args:
             event (event): event object
         """
-        event_collection = [event]
-
         for node in self:
             event_collection = node.process(event_collection)
 

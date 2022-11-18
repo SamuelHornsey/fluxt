@@ -1,13 +1,21 @@
+import string
+
 from streaming.app import App
 import streaming.operations as operations
 
+from streaming.sources import FileSource
+
 # create a streaming app
-app = App(name='Word Count')
+app = App(name='Word Count File')
 
 
 class Tokenizer(operations.FlatMapFunction):
     def flat_map(self, event):
         return event.lower().split()
+
+class RemoveGrammer(operations.MapFunction):
+    def map(self, event):
+        return event.translate(str.maketrans('', '', string.punctuation))
 
 
 class KeyIndex(operations.MapFunction):
@@ -25,12 +33,9 @@ class CountReducer(operations.ReducerFunction):
 
 @app.stream()
 def stream_processor(datastream):
-    events = ['event', 'event text', 'event test test',
-              'test text event hello hello']
-    print(f'input events = {events}')
+    datastream.add_source(FileSource('examples/data/lorem_ipsum.txt'))
 
-    datastream.source_from_collection(events)
-
-    datastream.pipeline(Tokenizer(), KeyIndex(), CountReducer())
+    datastream.pipeline(Tokenizer(), RemoveGrammer(),
+                            KeyIndex(), CountReducer())
 
     datastream.print()

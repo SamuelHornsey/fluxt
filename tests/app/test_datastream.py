@@ -109,7 +109,7 @@ def test_execute(monkeypatch):
     agg = []
 
     def mock_pipe_capture(event_collection):
-        for event in event_collection:
+        for event in event_collection.events:
             agg.append(event)
 
     ds = DataStream()

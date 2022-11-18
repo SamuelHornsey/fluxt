@@ -6,10 +6,10 @@ from streaming.operations.base import Operation
 class ReducerFunction(Operation):
     """ reducer function class """
 
-    def __call__(self, event_collection):
+    def process_batch(self, events):
         """ call reducer """
-        results = []
-        for event in event_collection:
+        batch = []
+        for event in events:
             key, value = event
 
             # attempt collect reduced
@@ -21,9 +21,9 @@ class ReducerFunction(Operation):
             reduced = self.reduce(key, reduced, value)
 
             self.storage_backend.set_key(key, reduced)
-            results.append((key, reduced))
+            batch.append((key, reduced))
 
-        return results
+        return batch
 
     @property
     def type(self):

@@ -6,9 +6,9 @@ from streaming.operations.base import Operation
 class MapFunction(Operation):
     """ map function class """
 
-    def __call__(self, event_collection):
+    def process_batch(self, events):
         """ call map function """
-        return [self.map(event) for event in event_collection]
+        return [self.map(event) for event in events]
 
     @property
     def type(self):

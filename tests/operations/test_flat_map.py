@@ -1,6 +1,7 @@
 import pytest
 
 from streaming.operations import FlatMapFunction
+from streaming.app.events import EventCollection
 
 
 class FlatMap(FlatMapFunction):
@@ -14,10 +15,12 @@ class BadFlatMap(FlatMapFunction):
 
 def test_flat_map_call():
     flat_map_function = FlatMap()
-    event_collection = flat_map_function(['text', 'text', 'some text'])
+    event_collection = EventCollection(None)
+    event_collection.events = ['text', 'text', 'some text']
+    event_collection = flat_map_function(event_collection)
 
-    assert len(event_collection) == 4
-    assert event_collection == ['text', 'text', 'some', 'text']
+    assert len(event_collection.events) == 4
+    assert event_collection.events == ['text', 'text', 'some', 'text']
 
 
 def test_flat_map_type():

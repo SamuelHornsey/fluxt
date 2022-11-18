@@ -6,21 +6,13 @@ from streaming.operations.base import Operation
 class FilterFunction(Operation):
     """ filter function class """
 
-    def __call__(self, event_collection):
-        """_summary_
-
-        Args:
-            event_collection (list): list of events
-
-        Returns:
-            event_collection: list of events
-        """
-        results = []
-        for event in event_collection:
+    def process_batch(self, events):
+        batch = []
+        for event in events:
             if self.filter(event):
-                results.append(event)
+                batch.append(event)
 
-        return results
+        return batch
 
     @property
     def type(self):

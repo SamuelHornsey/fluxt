@@ -6,13 +6,13 @@ from streaming.operations.base import Operation
 class FlatMapFunction(Operation):
     """ flat map function class """
 
-    def __call__(self, event_collection):
+    def process_batch(self, events):
         """ call flat map function """
-        results = []
-        for event in event_collection:
-            results += self.flat_map(event)
+        batch = []
+        for event in events:
+            batch += self.flat_map(event)
 
-        return results
+        return batch
 
     @property
     def type(self):

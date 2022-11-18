@@ -4,11 +4,11 @@ from streaming.app.datastream import DataStream
 
 class App(object):
     """ Streaming App Container """
-    agents = []
 
     def __init__(self, name=None, storage=None):
         """ init streaming app """
         self.name = name
+        self.agents = []
 
         if not storage:
             storage = Memory()
