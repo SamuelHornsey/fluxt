@@ -1,19 +1,22 @@
-from streaming.app import App
-from streaming.operations import MapFunction, FilterFunction
+from streaming import App
+
+import streaming.operations as operations
 
 # create a streaming app
 app = App(name='My Stream Processor')
 
-class MapProcessor(MapFunction):
-    def map(self, event):
-        return f'mapped-{event}'
+@operations.map()
+def map_processor(event):
+    return f'mapped-{event}'
 
-class FilterProcessor(FilterFunction):
-    def filter(self, event):
-        if 'event' in event:
-            return True
 
-        return False
+@operations.filter()
+def filter_processor(event):
+    if 'event' in event:
+        return True
+
+    return False
+
 
 @app.stream()
 def stream_processor(datastream):
@@ -22,7 +25,7 @@ def stream_processor(datastream):
 
     datastream.source_from_collection(events)
 
-    datastream.filter(FilterProcessor()) \
-          .map(MapProcessor())
+    datastream.filter(filter_processor) \
+          .map(map_processor)
 
     datastream.print()
