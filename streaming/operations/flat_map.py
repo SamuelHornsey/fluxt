@@ -3,6 +3,14 @@ from abc import ABC, abstractmethod
 from streaming.operations.base import Operation
 
 
+def flat_map_function_generator(func):
+    class TempFlatMap(FlatMapFunction):
+        def flat_map(self, event):
+            return func(event)
+
+    return TempFlatMap()
+
+
 class FlatMapFunction(Operation):
     """ flat map function class """
 

@@ -1,6 +1,6 @@
 import pytest
 
-from streaming.operations import FlatMapFunction
+from streaming.operations import FlatMapFunction, flat_map
 from streaming.app.events import EventCollection
 
 
@@ -26,6 +26,17 @@ def test_flat_map_call():
 def test_flat_map_type():
     flat_map_function = FlatMap()
     assert flat_map_function.type == 'FlatMapFunction'
+
+
+def test_decorated_flat_map():
+    @flat_map()
+    def my_flat_map(event):
+        return []
+
+    event_collection = EventCollection(None)
+    event_collection.events = [1, 2, 3]
+
+    assert my_flat_map(event_collection).events == []
 
 
 def test_flat_map_function():

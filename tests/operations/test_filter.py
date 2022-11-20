@@ -1,6 +1,6 @@
 import pytest
 
-from streaming.operations import FilterFunction
+from streaming.operations import FilterFunction, filter
 from streaming.app.events import EventCollection
 
 
@@ -25,6 +25,17 @@ def test_filter_call():
 def test_filter_type():
     filter_function = GoodFilterFunction()
     assert filter_function.type == 'FilterFunction'
+
+
+def test_decorated_filter():
+    @filter()
+    def my_filter(event):
+        return True
+
+    event_collection = EventCollection(None)
+    event_collection.events = [1, 2, 3]
+
+    assert my_filter(event_collection)
 
 
 def test_filter_function():

@@ -1,4 +1,4 @@
-# PyStreaming (Cool Lib Name Required)
+# Streamable
 
 > A python native stateful streaming framework
 
@@ -18,6 +18,7 @@ This is a new project that is in very early development stages. This project aim
   - JDBC
   - Files
   - Network
+  - influxDB
 - Stateful stream processing
 - Local single node dev mode
 - Multi node prod mode

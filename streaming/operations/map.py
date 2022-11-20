@@ -3,6 +3,14 @@ from abc import abstractmethod
 from streaming.operations.base import Operation
 
 
+def map_function_generator(func):
+    class TempMap(MapFunction):
+        def map(self, event):
+            return func(event)
+
+    return TempMap()
+
+
 class MapFunction(Operation):
     """ map function class """
 

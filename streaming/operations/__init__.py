@@ -1,10 +1,32 @@
-from streaming.operations.filter import FilterFunction
-from streaming.operations.map import MapFunction
-from streaming.operations.flat_map import FlatMapFunction
-from streaming.operations.reduce import ReducerFunction
+from streaming.operations.filter import FilterFunction, \
+    filter_function_generator
+from streaming.operations.map import MapFunction, \
+    map_function_generator
+from streaming.operations.flat_map import FlatMapFunction, \
+    flat_map_function_generator
+from streaming.operations.reduce import ReducerFunction, \
+    reducer_function_generator
+
+
+def filter(*args, **kwargs):
+    def inner(func):
+        return filter_function_generator(func)
+    return inner
+
+
+def flat_map(*args, **kwargs):
+    def inner(func):
+        return flat_map_function_generator(func)
+    return inner
 
 
 def map(*args, **kwargs):
     def inner(func):
-        map_function = MapFunction(handler_func=func)
-        return func
+        return map_function_generator(func)
+    return inner
+
+
+def reducer(*args, **kwargs):
+    def inner(func):
+        return reducer_function_generator(func)
+    return inner

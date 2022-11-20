@@ -3,6 +3,14 @@ from abc import abstractmethod
 from streaming.operations.base import Operation
 
 
+def reducer_function_generator(func):
+    class TempReducer(ReducerFunction):
+        def reduce(self, key, reduced, event):
+            return func(key, reduced, event)
+
+    return TempReducer()
+
+
 class ReducerFunction(Operation):
     """ reducer function class """
 

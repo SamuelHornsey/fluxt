@@ -1,6 +1,6 @@
 import pytest
 
-from streaming.operations import MapFunction
+from streaming.operations import MapFunction, map
 from streaming.app.events import EventCollection
 
 
@@ -30,6 +30,17 @@ def test_map_call():
 def test_map_type():
     test_map = GoodMapFunction()
     assert test_map.type == 'MapFunction'
+
+
+def test_decorated_map():
+    @map()
+    def my_map(event):
+        return event
+
+    event_collection = EventCollection(None)
+    event_collection.events = [1, 2, 3]
+
+    assert my_map(event_collection).events == [1, 2, 3]
 
 
 def test_map_function():

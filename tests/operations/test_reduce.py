@@ -1,6 +1,6 @@
 import pytest
 
-from streaming.operations import ReducerFunction
+from streaming.operations import ReducerFunction, reducer
 from streaming.storage import Memory
 from streaming.app.events import EventCollection
 
@@ -37,6 +37,22 @@ def test_reduce_call(memory):
 def test_reduce_type():
     test_reduce = GoodReduceFunction()
     assert test_reduce.type == 'ReducerFunction'
+
+
+def test_decorated_map(memory):
+    @reducer()
+    def my_reducer(key, accum, event):
+        if not accum:
+            return 1
+        return event + accum
+
+    my_reducer.storage = memory
+
+    event_collection = EventCollection(None)
+    event_collection.events = [('key', 1), ('key', 2), ('other', 1)]
+
+    assert my_reducer(event_collection).events == [('key', 1), ('key', 3),
+                                                   ('other', 1)]
 
 
 def test_reduce_function():

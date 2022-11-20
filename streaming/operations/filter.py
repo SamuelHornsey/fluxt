@@ -3,6 +3,14 @@ from abc import abstractmethod
 from streaming.operations.base import Operation
 
 
+def filter_function_generator(func):
+    class TempFilter(FilterFunction):
+        def filter(self, event):
+            return func(event)
+
+    return TempFilter()
+
+
 class FilterFunction(Operation):
     """ filter function class """
 
