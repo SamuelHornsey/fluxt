@@ -9,24 +9,28 @@ from streaming.operations.reduce import ReducerFunction, \
 
 
 def filter(*args, **kwargs):
+    """ filter function decorator """
     def inner(func):
         return filter_function_generator(func)
     return inner
 
 
 def flat_map(*args, **kwargs):
+    """ flat map function decorator """
     def inner(func):
         return flat_map_function_generator(func)
     return inner
 
 
 def map(*args, **kwargs):
+    """ map function decorator """
     def inner(func):
         return map_function_generator(func)
     return inner
 
 
 def reducer(*args, **kwargs):
+    """ reducer function decorator """
     def inner(func):
         return reducer_function_generator(func)
     return inner
