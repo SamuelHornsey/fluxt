@@ -4,11 +4,12 @@ from streaming.storage import Memory
 import streaming.operations as operations
 
 storage = Memory()
+
 app = App(name='Page Views', storage=storage)
 
 class FormatEvents(operations.MapFunction):
     def map(self, event):
-        return self.keyed_event(event['page'], event['page_views'])
+        return event['page'], event['page_views']
 
 class CountViews(operations.ReducerFunction):
     def reduce(self, key, reduced, event):
@@ -16,6 +17,10 @@ class CountViews(operations.ReducerFunction):
             return event
 
         return reduced + event
+
+@operations.key_by()
+def key(event):
+    return event[0], event[1]
 
 @app.stream()
 def views_per_page(ds):
@@ -29,4 +34,5 @@ def views_per_page(ds):
     ds.print()
 
     ds.map(FormatEvents()) \
+      .key_by(key) \
       .reduce(CountViews())

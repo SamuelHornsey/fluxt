@@ -24,10 +24,9 @@ def count_reducer(key, accum, event):
         return 1
     return event + accum
 
-
-class KeyIndex(operations.MapFunction):
-    def map(self, event):
-        return self.keyed_event(event, 1)
+@operations.key_by()
+def key_index(event):
+    return event, 1
 
 
 @app.stream()
@@ -35,6 +34,6 @@ def stream_processor(datastream):
     datastream.add_source(FileSource('examples/data/lorem_ipsum.txt'))
 
     datastream.pipeline(tokenizer, remove_grammer,
-                            KeyIndex(), count_reducer)
+                            key_index, count_reducer)
 
     datastream.add_sink(FileSink('output.txt'))

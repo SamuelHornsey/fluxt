@@ -9,3 +9,4 @@ utils
 .DS_Store
 scratch
 *.db
+output.txt

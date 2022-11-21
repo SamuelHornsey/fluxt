@@ -1,6 +1,3 @@
-from streaming.app.events import EventCollection
-
-
 class GraphException(Exception):
     pass
 
@@ -83,6 +80,11 @@ class StreamGraph(object):
 
         for node in self:
             last = node
+
+        if new_node.operation.type == 'ReducerFunction' \
+                and last.operation.type != 'KeyByFunction':
+            raise GraphException(f'{new_node.operation.type} must be '
+                                 'preceeded by a KeyByFunction node')
 
         last.next = new_node
 

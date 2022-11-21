@@ -6,6 +6,8 @@ from streaming.operations.flat_map import FlatMapFunction, \
     flat_map_function_generator
 from streaming.operations.reduce import ReducerFunction, \
     reducer_function_generator
+from streaming.operations.key import KeyByFunction, \
+    key_by_function_generator
 
 
 def filter(*args, **kwargs):
@@ -33,4 +35,11 @@ def reducer(*args, **kwargs):
     """ reducer function decorator """
     def inner(func):
         return reducer_function_generator(func)
+    return inner
+
+
+def key_by(*args, **kwargs):
+    """ key by function decorator """
+    def inner(func):
+        return key_by_function_generator(func)
     return inner

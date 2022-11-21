@@ -4,23 +4,20 @@ import streaming.operations as operations
 # create a streaming app
 app = App(name='Word Count')
 
+@operations.flat_map()
+def tokenizer(event):
+    return event.lower().split(' ')
 
-class Tokenizer(operations.FlatMapFunction):
-    def flat_map(self, event):
-        return event.lower().split()
+@operations.key_by()
+def key_by(event):
+    return (event, 1)
 
+@operations.reducer()
+def count(key, accum, event):
+    if accum is None:
+        return 1
 
-class KeyIndex(operations.MapFunction):
-    def map(self, event):
-        return self.keyed_event(event, 1)
-
-
-class CountReducer(operations.ReducerFunction):
-    def reduce(self, key, reduced, event):
-        if reduced is None:
-            return 1
-
-        return reduced + event
+    return accum + event
 
 
 @app.stream()
@@ -31,6 +28,6 @@ def stream_processor(datastream):
 
     datastream.source_from_collection(events)
 
-    datastream.pipeline(Tokenizer(), KeyIndex(), CountReducer())
+    datastream.pipeline(tokenizer, key_by, count)
 
     datastream.print()
