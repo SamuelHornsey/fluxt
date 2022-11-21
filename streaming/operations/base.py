@@ -37,7 +37,3 @@ class Operation(ABC):
     def storage(self, storage):
         """ set operation storage class """
         self.storage_backend = storage
-
-    def keyed_event(self, key, data):
-        """ return a keyed event """
-        return (key, data)

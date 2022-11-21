@@ -15,21 +15,6 @@ class DataStreamOperations:
 
         return self
 
-    def group_by(self, index):
-        def key_by(event):
-            key = event[index]
-
-            new_event = list(event)
-            new_event.pop(index)
-
-            return key, new_event
-
-        key_by_function = operations.key_by_function_generator(key_by)
-
-        self.transformations.append(key_by_function)
-
-        return self
-
     def key_by(self, key_by_function):
         """ add key by
 

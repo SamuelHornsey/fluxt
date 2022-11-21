@@ -37,6 +37,13 @@ class Reduce(operations.ReducerFunction):
         return event + reduced
 
 
+class KeyBy(operations.KeyByFunction):
+    """ example key by function """
+
+    def key_by(self, event):
+        return super().key_by(event)
+
+
 def test_add_source():
     datastream = DataStream()
     datastream.add_source('source')
@@ -103,6 +110,17 @@ def test_reduce():
         datastream.reduce(FlatMap())
 
     assert "is not type ReducerFunction" in str(e)
+
+
+def test_key_by():
+    datastream = DataStream()
+    datastream.key_by(KeyBy())
+    assert len(datastream.transformations) == 1
+
+    with pytest.raises(TypeError) as e:
+        datastream.key_by(FlatMap())
+
+    assert "is not type KeyByFunction" in str(e)
 
 
 def test_pipeline():

@@ -50,13 +50,6 @@ def test_map_function():
     assert event == {'event': 'data'}
 
 
-def test_map_function_keyed():
-    test_map = KeyedMapFunction()
-    event = test_map.map('word')
-
-    assert event == ('word', 1)
-
-
 def test_map_function_abstract():
     with pytest.raises(TypeError):
         BadMapFunction()

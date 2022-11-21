@@ -7,7 +7,7 @@ from streaming.app.events import EventCollection
 
 class GoodReduceFunction(ReducerFunction):
     def reduce(self, key, reduced, event):
-        if reduced == None:
+        if reduced is None:
             return 1
 
         return reduced + event

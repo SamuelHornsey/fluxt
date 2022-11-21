@@ -1,7 +1,9 @@
 import pytest
 
-from streaming.app.graph import OperationNode, StreamGraph, graph_generator
-from streaming.operations import FilterFunction, MapFunction, ReducerFunction
+from streaming.app.graph import OperationNode, StreamGraph, \
+    graph_generator, GraphException
+from streaming.operations import FilterFunction, MapFunction, \
+    ReducerFunction, KeyByFunction
 from streaming.app.events import EventCollection
 from streaming.storage import Memory
 
@@ -19,6 +21,11 @@ class Filter(FilterFunction):
 class Reducer(ReducerFunction):
     def reduce(self, accumalator, event):
         pass
+
+
+class KeyBy(KeyByFunction):
+    def key_by(self, event):
+        return super().key_by(event)
 
 
 @pytest.fixture()
@@ -62,6 +69,9 @@ def test_stream_graph_add_node(storage):
 
     assert graph.head.next
 
+    with pytest.raises(GraphException):
+        graph.add_node(Reducer())
+
 
 def test_stream_graph_run(storage):
     event = {'test': 'event'}
@@ -71,6 +81,20 @@ def test_stream_graph_run(storage):
 
     assert len(event_collection.events) == 1
     assert event_collection.events[0] == event
+
+
+def test_stream_graph_run_empty_events(storage):
+    event = {'test': 'event'}
+
+    class FilterAll(FilterFunction):
+        def filter(self, event):
+            return False
+
+    graph = graph_generator([FilterAll()], storage)
+
+    event_collection = graph.run(EventCollection(event))
+
+    assert not event_collection
 
 
 def test_operation_node_process():
