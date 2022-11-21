@@ -7,10 +7,6 @@ class EventCollection(object):
             return True
         return False
 
-    def read_events(self):
-        for event in self.event_collection:
-            yield event
-
     @property
     def events(self):
         return self.event_collection
