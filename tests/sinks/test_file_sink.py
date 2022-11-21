@@ -2,6 +2,7 @@ from streaming.sinks import FileSink
 
 from streaming.app.events import EventCollection
 
+
 def test_file_sink(monkeypatch):
     agg = []
 
