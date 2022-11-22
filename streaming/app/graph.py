@@ -66,6 +66,9 @@ class StreamGraph(object):
 
         Args:
             operation (object): operation node
+
+        Raises:
+            GraphException: when a node requires keyed stream
         """
         new_node = OperationNode(operation)
 

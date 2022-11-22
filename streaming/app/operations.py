@@ -4,6 +4,12 @@ from streaming.operations.base import Operation
 
 
 class DataStreamOperations:
+    """ container for datastream operation handlers """
+
+    def __init__(self):
+        """ init datastream operations """
+        self.transformations = []
+
     def pipeline(self, *args):
         """ create an operation pipeline """
         for operation in args:

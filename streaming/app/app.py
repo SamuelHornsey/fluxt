@@ -1,6 +1,8 @@
 from streaming.storage import Memory
 from streaming.app.datastream import DataStream
 
+from multiprocessing import Process
+
 
 class App(object):
     """ Streaming App Container """
@@ -28,11 +30,26 @@ class App(object):
 
     def run(self):
         """ run streaming app """
-        datastream = DataStream()
-
-        datastream.storage = self.storage
+        streams = []
+        proc = []
 
         for agent in self.agents:
-            agent(datastream)
+            datastream = DataStream()
+            datastream.storage = self.storage
 
-        datastream.execute()
+            agent(datastream)
+            streams.append(datastream)
+
+        for stream in streams:
+            process = Process(target=stream.execute)
+            process.start()
+            proc.append(process)
+
+
+        for p in proc:
+            p.join()
+
+        # for agent in self.agents:
+        #     agent(datastream)
+
+        # datastream.execute()
