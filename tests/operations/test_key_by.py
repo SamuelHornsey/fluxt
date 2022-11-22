@@ -1,7 +1,7 @@
 import pytest
 
-from streaming.operations import KeyByFunction, key_by
-from streaming.app.events import EventCollection
+from fluxt.operations import KeyByFunction, key_by
+from fluxt.app.events import EventCollection
 
 
 class KeyBy(KeyByFunction):

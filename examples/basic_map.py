@@ -1,6 +1,6 @@
-from streaming import App
+from fluxt import App
 
-import streaming.operations as operations
+import fluxt.operations as operations
 
 # create a streaming app
 app = App(name='My Stream Processor')

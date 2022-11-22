@@ -1,12 +1,12 @@
-from streaming.operations.filter import FilterFunction, \
+from fluxt.operations.filter import FilterFunction, \
     filter_function_generator
-from streaming.operations.map import MapFunction, \
+from fluxt.operations.map import MapFunction, \
     map_function_generator
-from streaming.operations.flat_map import FlatMapFunction, \
+from fluxt.operations.flat_map import FlatMapFunction, \
     flat_map_function_generator
-from streaming.operations.reduce import ReducerFunction, \
+from fluxt.operations.reduce import ReducerFunction, \
     reducer_function_generator
-from streaming.operations.key import KeyByFunction, \
+from fluxt.operations.key import KeyByFunction, \
     key_by_function_generator
 
 

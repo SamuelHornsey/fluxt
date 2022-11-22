@@ -1,8 +1,8 @@
 import pytest
 
-from streaming.app import App
-from streaming.operations import MapFunction
-from streaming.app.graph import GraphException
+from fluxt.app import App
+from fluxt.operations import MapFunction
+from fluxt.app.graph import GraphException
 
 
 class Map(MapFunction):

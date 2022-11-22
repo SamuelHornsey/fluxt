@@ -1,4 +1,4 @@
-# Streamable
+# fluxt
 
 > A python native stateful streaming framework
 
@@ -8,47 +8,31 @@
 
 This is a new project that is in very early development stages. This project aims to provide a pythonic, native alternative to Spark, Flink or Storm. 
 
-## Features
-
-- Python native
-- Multiple source/sink support
-  - Kafka
-  - Pulsar
-  - Elasticsearch
-  - JDBC
-  - Files
-  - Network
-  - influxDB
-- Stateful stream processing
-- Local single node dev mode
-- Multi node prod mode
-
 ## Getting Started
 
 ```python
-from streaming.app import App
-import streaming.operations as operations
+from fluxt import App
+import fluxt.operations as operations
 
 # create a streaming app
 app = App(name='Word Count')
 
 
-class Tokenizer(operations.FlatMapFunction):
-    def flat_map(self, event):
-        return event.lower().split()
+@operations.flat_map()
+def tokenizer(event):
+    return event.lower().split()
 
 
-class KeyIndex(operations.MapFunction):
-    def map(self, event):
-        return self.keyed_event(event, 1)
+@operations.key_by()
+def key(event):
+    return event, 1
 
 
-class CountReducer(operations.ReducerFunction):
-    def reduce(self, key, reduced, event):
-        if reduced is None:
-            return 1
-
-        return reduced + event
+@operations.reducer()
+def count(key, reduced, event):
+    if reduced is None:
+        return 1
+    return reduced + event
 
 
 @app.stream()
@@ -59,9 +43,9 @@ def stream_processor(datastream):
 
     datastream.source_from_collection(events)
 
-    datastream.flat_map(Tokenizer()) \
-        .map(KeyIndex()) \
-        .reduce(CountReducer())
+    datastream.flat_map(tokenizer) \
+        .key_by(key) \
+        .reduce(count)
 
     datastream.print()
 

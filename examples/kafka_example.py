@@ -1,6 +1,6 @@
-from streaming.app import App
-import streaming.operations as operations
-from streaming.sources import KafkaSource
+from fluxt.app import App
+import fluxt.operations as operations
+from fluxt.sources import KafkaSource
 
 # create a streaming app
 app = App(name='My Kafka Stream Processor')

@@ -1,7 +1,7 @@
-from streaming import App
-from streaming.storage import Memory
+from fluxt import App
+from fluxt.storage import Memory
 
-import streaming.operations as operations
+import fluxt.operations as operations
 
 storage = Memory()
 

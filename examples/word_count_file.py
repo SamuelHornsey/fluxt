@@ -1,11 +1,11 @@
 import string
 
-from streaming.app import App
+from fluxt.app import App
 
-import streaming.operations as operations
+import fluxt.operations as operations
 
-from streaming.sources import FileSource
-from streaming.sinks import FileSink
+from fluxt.sources import FileSource
+from fluxt.sinks import FileSink
 
 # create a streaming app
 app = App(name='Word Count File')

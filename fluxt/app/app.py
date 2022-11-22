@@ -1,5 +1,5 @@
-from streaming.storage import Memory
-from streaming.app.datastream import DataStream
+from fluxt.storage import Memory
+from fluxt.app.datastream import DataStream
 
 
 class App(object):

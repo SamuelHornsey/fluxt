@@ -1,4 +1,4 @@
-from streaming.sources import CollectionSource
+from fluxt.sources import CollectionSource
 
 
 def test_collection_source():

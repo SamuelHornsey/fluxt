@@ -1,8 +1,8 @@
 import pytest
 
-from streaming.operations import ReducerFunction, reducer
-from streaming.storage import Memory
-from streaming.app.events import EventCollection
+from fluxt.operations import ReducerFunction, reducer
+from fluxt.storage import Memory
+from fluxt.app.events import EventCollection
 
 
 class GoodReduceFunction(ReducerFunction):

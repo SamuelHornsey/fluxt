@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from streaming.operations.base import Operation
+from fluxt.operations.base import Operation
 
 
 def map_function_generator(func):

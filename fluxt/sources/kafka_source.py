@@ -1,6 +1,6 @@
 from kafka import KafkaConsumer
 
-from streaming.sources.base import Source
+from fluxt.sources.base import Source
 
 
 class KafkaSource(Source):

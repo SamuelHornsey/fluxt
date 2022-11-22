@@ -1,6 +1,6 @@
-from streaming.sinks import FileSink
+from fluxt.sinks import FileSink
 
-from streaming.app.events import EventCollection
+from fluxt.app.events import EventCollection
 
 
 def test_file_sink(monkeypatch):

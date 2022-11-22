@@ -1,6 +1,6 @@
 import pytest
 
-from streaming.storage import Memory
+from fluxt.storage import Memory
 
 
 @pytest.fixture

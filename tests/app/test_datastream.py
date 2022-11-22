@@ -1,10 +1,10 @@
 import pytest
 
-from streaming.app.datastream import DataStream, DataStreamException
-from streaming.sources import CollectionSource
-from streaming.sinks import StdoutSink
+from fluxt.app.datastream import DataStream, DataStreamException
+from fluxt.sources import CollectionSource
+from fluxt.sinks import StdoutSink
 
-import streaming.operations as operations
+import fluxt.operations as operations
 
 
 class Map(operations.MapFunction):

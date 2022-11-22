@@ -1,7 +1,7 @@
 import pytest
 
-from streaming.operations import FlatMapFunction, flat_map
-from streaming.app.events import EventCollection
+from fluxt.operations import FlatMapFunction, flat_map
+from fluxt.app.events import EventCollection
 
 
 class FlatMap(FlatMapFunction):

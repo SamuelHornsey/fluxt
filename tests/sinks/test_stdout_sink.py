@@ -1,6 +1,6 @@
-from streaming.sinks import StdoutSink
+from fluxt.sinks import StdoutSink
 
-from streaming.app.events import EventCollection
+from fluxt.app.events import EventCollection
 
 
 def test_stdout_sink(capsys):

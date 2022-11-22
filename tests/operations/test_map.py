@@ -1,7 +1,7 @@
 import pytest
 
-from streaming.operations import MapFunction, map
-from streaming.app.events import EventCollection
+from fluxt.operations import MapFunction, map
+from fluxt.app.events import EventCollection
 
 
 class GoodMapFunction(MapFunction):

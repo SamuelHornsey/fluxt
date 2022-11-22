@@ -1,4 +1,4 @@
-from streaming.storage.base import Base
+from fluxt.storage.base import Base
 
 
 class Memory(Base):

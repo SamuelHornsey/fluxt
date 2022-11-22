@@ -1,10 +1,10 @@
 import logging
 
-from streaming.app.operations import DataStreamOperations
-from streaming.app.events import EventCollection
-from streaming.app.graph import graph_generator
-from streaming.sources import CollectionSource
-from streaming.sinks import StdoutSink
+from fluxt.app.operations import DataStreamOperations
+from fluxt.app.events import EventCollection
+from fluxt.app.graph import graph_generator
+from fluxt.sources import CollectionSource
+from fluxt.sinks import StdoutSink
 
 logger = logging.getLogger(__name__)
 

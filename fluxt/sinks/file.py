@@ -1,6 +1,6 @@
 import sys
 
-from streaming.sinks.base import Sink
+from fluxt.sinks.base import Sink
 
 
 class FileSink(Sink):

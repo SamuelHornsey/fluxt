@@ -1,5 +1,5 @@
-from streaming.app import App
-import streaming.operations as operations
+from fluxt.app import App
+import fluxt.operations as operations
 
 # create a streaming app
 app = App(name='Word Count')

@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from streaming.operations.base import Operation
+from fluxt.operations.base import Operation
 
 
 def filter_function_generator(func):

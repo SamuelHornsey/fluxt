@@ -1,6 +1,6 @@
-import streaming.operations as operations
+import fluxt.operations as operations
 
-from streaming.operations.base import Operation
+from fluxt.operations.base import Operation
 
 
 class DataStreamOperations:

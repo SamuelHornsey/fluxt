@@ -1,7 +1,7 @@
 import pytest
 import sqlite3
 
-from streaming.storage import LocalDatabase
+from fluxt.storage import LocalDatabase
 
 DB_PATH = 'streaming_test.db'
 

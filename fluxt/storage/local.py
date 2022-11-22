@@ -1,7 +1,7 @@
 import sqlite3
 import logging
 
-from streaming.storage.base import Base
+from fluxt.storage.base import Base
 
 logger = logging.getLogger(__name__)
 

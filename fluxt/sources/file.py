@@ -1,4 +1,4 @@
-from streaming.sources.base import Source
+from fluxt.sources.base import Source
 
 
 class FileSource(Source):

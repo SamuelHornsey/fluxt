@@ -1,11 +1,11 @@
 import pytest
 
-from streaming.app.graph import OperationNode, StreamGraph, \
+from fluxt.app.graph import OperationNode, StreamGraph, \
     graph_generator, GraphException
-from streaming.operations import FilterFunction, MapFunction, \
+from fluxt.operations import FilterFunction, MapFunction, \
     ReducerFunction, KeyByFunction
-from streaming.app.events import EventCollection
-from streaming.storage import Memory
+from fluxt.app.events import EventCollection
+from fluxt.storage import Memory
 
 
 class Map(MapFunction):

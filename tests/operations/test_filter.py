@@ -1,7 +1,7 @@
 import pytest
 
-from streaming.operations import FilterFunction, filter
-from streaming.app.events import EventCollection
+from fluxt.operations import FilterFunction, filter
+from fluxt.app.events import EventCollection
 
 
 class GoodFilterFunction(FilterFunction):
