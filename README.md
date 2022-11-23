@@ -7,7 +7,7 @@ A python native stateful streaming framework
 
 ## About
 
-> :warning: **Very Early Development**: This platform will change rapidly
+⚠️ **Very Early Development**: This platform will change rapidly
 
 This is a new project that is in very early development stages. This project aims to provide a pythonic, native alternative to Spark, Flink or Storm. 
 
@@ -18,7 +18,7 @@ from fluxt import Fluxt
 import fluxt.operations as operations
 
 # create a streaming app
-app = Fluxt(name='Word Count')
+fluxt = Fluxt(name='Word Count')
 
 
 @operations.flat_map()
@@ -38,7 +38,7 @@ def count(key, reduced, event):
     return reduced + event
 
 
-@app.stream()
+@fluxt.stream()
 def stream_processor(datastream):
     events = ['event', 'event text', 'event test test',
               'test text event hello hello']
@@ -52,4 +52,7 @@ def stream_processor(datastream):
 
     datastream.print()
 
+
+if __name__ == '__main__':
+    fluxt.run()
 ```
