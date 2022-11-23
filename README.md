@@ -1,6 +1,9 @@
 # fluxt
 
-> A python native stateful streaming framework
+[![codecov](https://codecov.io/gh/SamuelHornsey/fluxt/branch/main/graph/badge.svg?token=NIV5LW1E98)](https://codecov.io/gh/SamuelHornsey/fluxt)
+[![PyPI version](https://badge.fury.io/py/fluxt.svg)](https://badge.fury.io/py/fluxt)
+
+A python native stateful streaming framework
 
 ## About
 
