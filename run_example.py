@@ -2,10 +2,10 @@ import importlib
 import argparse
 
 parser = argparse.ArgumentParser(description='Run an example app')
-parser.add_argument('app', help='App module')
+parser.add_argument('fluxt', help='fluxt module')
 args = parser.parse_args()
 
-module = importlib.import_module(args.app)
+module = importlib.import_module(args.fluxt)
 
 if __name__ == '__main__':
-    module.app.run()
+    module.fluxt.run()

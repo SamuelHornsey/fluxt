@@ -2,7 +2,7 @@ from fluxt.storage import Memory
 from fluxt.app.datastream import DataStream
 
 
-class App(object):
+class Fluxt(object):
     """ Streaming App Container """
 
     def __init__(self, name=None, storage=None):
@@ -17,7 +17,7 @@ class App(object):
 
     def __repr__(self):
         """ streaming app repr """
-        return f'App(name="{self.name}")'
+        return f'Fluxt(name="{self.name}")'
 
     def stream(self, *args, **kwargs):
         """ add stream agent """

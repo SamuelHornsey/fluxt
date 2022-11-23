@@ -1,9 +1,9 @@
-from fluxt.app import App
+from fluxt.app import Fluxt
 import fluxt.operations as operations
 from fluxt.sources import KafkaSource
 
 # create a streaming app
-app = App(name='My Kafka Stream Processor')
+fluxt = Fluxt(name='My Kafka Stream Processor')
 
 @operations.filter()
 def filter_strings(event):
@@ -25,7 +25,7 @@ def count(key, accum, event):
         return event
     return accum + event
 
-@app.stream()
+@fluxt.stream()
 def stream_processor(data_stream):
     data_stream.add_source(KafkaSource('foobar', bootstrap_servers='localhost:9092'))
 

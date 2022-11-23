@@ -1,8 +1,8 @@
-from fluxt.app import App
+from fluxt.app import Fluxt
 import fluxt.operations as operations
 
 # create a streaming app
-app = App(name='Word Count')
+fluxt = Fluxt(name='Word Count')
 
 @operations.flat_map()
 def tokenizer(event):
@@ -20,7 +20,7 @@ def count(key, accum, event):
     return accum + event
 
 
-@app.stream()
+@fluxt.stream()
 def stream_processor(datastream):
     events = ['event', 'event text', 'event test test',
               'test text event hello hello']

@@ -11,11 +11,11 @@ This is a new project that is in very early development stages. This project aim
 ## Getting Started
 
 ```python
-from fluxt import App
+from fluxt import Fluxt
 import fluxt.operations as operations
 
 # create a streaming app
-app = App(name='Word Count')
+app = Fluxt(name='Word Count')
 
 
 @operations.flat_map()

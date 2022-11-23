@@ -1,6 +1,6 @@
 import string
 
-from fluxt.app import App
+from fluxt.app import Fluxt
 
 import fluxt.operations as operations
 
@@ -8,7 +8,7 @@ from fluxt.sources import FileSource
 from fluxt.sinks import FileSink
 
 # create a streaming app
-app = App(name='Word Count File')
+fluxt = Fluxt(name='Word Count File')
 
 @operations.flat_map()
 def tokenizer(event):
@@ -29,7 +29,7 @@ def key_index(event):
     return event, 1
 
 
-@app.stream()
+@fluxt.stream()
 def stream_processor(datastream):
     datastream.add_source(FileSource('examples/data/lorem_ipsum.txt'))
 

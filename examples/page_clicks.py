@@ -1,11 +1,11 @@
-from fluxt import App
+from fluxt import Fluxt
 from fluxt.storage import Memory
 
 import fluxt.operations as operations
 
 storage = Memory()
 
-app = App(name='Page Views', storage=storage)
+fluxt = Fluxt(name='Page Views', storage=storage)
 
 class FormatEvents(operations.MapFunction):
     def map(self, event):
@@ -22,7 +22,7 @@ class CountViews(operations.ReducerFunction):
 def key(event):
     return event[0], event[1]
 
-@app.stream()
+@fluxt.stream()
 def views_per_page(ds):
     ds.source_from_collection([
       {'username': 'sam', 'page_views': 11, 'page': 'about'},

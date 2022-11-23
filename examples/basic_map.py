@@ -1,9 +1,9 @@
-from fluxt import App
+from fluxt import Fluxt
 
 import fluxt.operations as operations
 
 # create a streaming app
-app = App(name='My Stream Processor')
+fluxt = Fluxt(name='My Stream Processor')
 
 @operations.map()
 def map_processor(event):
@@ -18,7 +18,7 @@ def filter_processor(event):
     return False
 
 
-@app.stream()
+@fluxt.stream()
 def stream_processor(datastream):
     events = ['event1', 'event2', 'event3', 'bad']
     print(f'input events = {events}')

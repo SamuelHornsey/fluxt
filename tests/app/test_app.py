@@ -1,6 +1,6 @@
 import pytest
 
-from fluxt.app import App
+from fluxt.app import Fluxt
 from fluxt.operations import MapFunction
 from fluxt.app.graph import GraphException
 
@@ -12,11 +12,11 @@ class Map(MapFunction):
 
 @pytest.fixture()
 def app():
-    return App(name='Test Streaming App')
+    return Fluxt(name='Test Streaming App')
 
 
 def test_repr(app):
-    assert app.__repr__() == 'App(name="Test Streaming App")'
+    assert app.__repr__() == 'Fluxt(name="Test Streaming App")'
 
 
 def test_stream(app):

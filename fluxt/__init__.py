@@ -1,1 +1,1 @@
-from fluxt.app import App
+from fluxt.app import Fluxt
