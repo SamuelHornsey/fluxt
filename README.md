@@ -40,9 +40,8 @@ def count(key, reduced, event):
 
 @fluxt.stream()
 def stream_processor(datastream):
-    events = ['event', 'event text', 'event test test',
-              'test text event hello hello']
-    print(f'input events = {events}')
+    events = ['welcome', 'to', 'fluxt!',
+                'The', 'python', 'streaming framework']
 
     datastream.source_from_collection(events)
 
@@ -54,5 +53,6 @@ def stream_processor(datastream):
 
 
 if __name__ == '__main__':
+    # run the fluxt app
     fluxt.run()
 ```
