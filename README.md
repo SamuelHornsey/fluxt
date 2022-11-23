@@ -2,9 +2,9 @@
 
 > A python native stateful streaming framework
 
-> :warning: **Very Early Development**: This platform will change rapidly
-
 ## About
+
+> :warning: **Very Early Development**: This platform will change rapidly
 
 This is a new project that is in very early development stages. This project aims to provide a pythonic, native alternative to Spark, Flink or Storm. 
 

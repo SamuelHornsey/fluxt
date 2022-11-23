@@ -10,3 +10,6 @@ utils
 scratch
 *.db
 output.txt
+dist
+*.egg-info
+build
