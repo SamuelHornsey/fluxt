@@ -9,7 +9,7 @@ def test_file_sink(monkeypatch):
     def mock_file_write(event):
         agg.append(event)
 
-    sink = FileSink('output.txt')
+    sink = FileSink('/tmp/output.txt')
     event_collection = EventCollection({'test': 'event'})
     monkeypatch.setattr(sink.file, 'write', mock_file_write)
 

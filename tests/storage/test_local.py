@@ -3,7 +3,7 @@ import sqlite3
 
 from fluxt.storage import LocalDatabase
 
-DB_PATH = 'streaming_test.db'
+DB_PATH = '/tmp/streaming_test.db'
 
 
 @pytest.fixture
