@@ -4,7 +4,7 @@ import rocksdb
 from fluxt.storage import RocksDB
 from fluxt.storage.base import StorageException
 
-DATADIR = '/tmp/data'
+DATADIR = '/tmp'
 
 
 def test_start_rocks_storage():

@@ -35,5 +35,6 @@ class BaseStorage:
         return self._del(key, partition)
 
 
+# TODO: complete
 class SerializedPartition:
     pass
