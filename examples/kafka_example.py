@@ -1,9 +1,12 @@
 from fluxt.app import Fluxt
 import fluxt.operations as operations
 from fluxt.sources import KafkaSource
+from fluxt.storage import RocksDB
 
 # create a streaming app
 fluxt = Fluxt(name='My Kafka Stream Processor')
+
+fluxt.storage = RocksDB('/tmp/data')
 
 
 @operations.filter()
@@ -26,8 +29,8 @@ def tokenize(event):
 @operations.reducer()
 def count(key, accum, event):
     if not accum:
-        return event
-    return accum + event
+        return str(1)
+    return str(int(event) + int(accum))
 
 
 @fluxt.stream()

@@ -28,15 +28,14 @@ class ReducerFunction(Operation):
             key, value = event
 
             # attempt collect reduced
-            # TODO: improve
             try:
-                reduced = self.storage_backend.get_key(key, self.partition_key)
+                reduced = self.storage_get(key)
             except KeyError:
                 reduced = None
 
             reduced = self.reduce(key, reduced, value)
 
-            self.storage_backend.set_key(key, reduced, self.partition_key)
+            self.storage_set(key, reduced)
             batch.append((key, reduced))
 
         return batch

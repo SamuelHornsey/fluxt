@@ -48,7 +48,7 @@ class Operation(ABC):
         self.storage_partition_key = partition
 
     def storage_set(self, key, value):
-        pass
+        self.storage_backend.set_key(key, value, self.partition_key)
 
     def storage_get(self, key):
-        pass
+        return self.storage_backend.get_key(key, self.partition_key)

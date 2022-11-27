@@ -6,9 +6,12 @@ import fluxt.operations as operations
 
 from fluxt.sources import FileSource
 from fluxt.sinks import FileSink
+from fluxt.storage import RocksDB
 
 # create a streaming app
 fluxt = Fluxt(name='Word Count File')
+
+fluxt.storage = RocksDB('scratch/data')
 
 
 @operations.flat_map()
@@ -24,8 +27,8 @@ def remove_grammer(event):
 @operations.reducer()
 def count_reducer(key, accum, event):
     if not accum:
-        return 1
-    return event + accum
+        return str(1)
+    return str(int(event) + int(accum))
 
 
 @operations.key_by()
