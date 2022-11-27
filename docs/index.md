@@ -56,5 +56,5 @@ if __name__ == '__main__':
 Alternatively to running the python script, fluxt apps can also be run through the cli.
 
 ```sh
-fluxt run module:app
+fluxt run module_name --app my_fluxt_app
 ```

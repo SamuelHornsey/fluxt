@@ -1,3 +1,6 @@
+def infer_types():
+    pass
+
 class TypedTuple:
     def __init__(self, *args, **kwargs):
         pass
