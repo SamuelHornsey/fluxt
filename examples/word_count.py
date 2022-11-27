@@ -4,13 +4,16 @@ import fluxt.operations as operations
 # create a streaming app
 fluxt = Fluxt(name='Word Count')
 
+
 @operations.flat_map()
 def tokenizer(event):
     return event.lower().split(' ')
 
+
 @operations.key_by()
 def key_by(event):
     return (event, 1)
+
 
 @operations.reducer()
 def count(key, accum, event):

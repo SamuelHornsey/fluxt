@@ -1,3 +1,6 @@
+import uuid
+
+from fluxt.sources.base import NAMESPACE_FLUXT
 from fluxt.sources import FileSource
 
 
@@ -7,7 +10,7 @@ def test_file_source():
     assert source.file == file_path
 
 
-def test_collection_source_generate():
+def test_file_source_generate():
     file_path = 'examples/data/lorem_ipsum.txt'
     source = FileSource(file_path)
 
@@ -23,3 +26,12 @@ def test_collection_source_generate():
 
     for i in range(len(lines)):
         assert lines[i].strip() == events[i]
+
+
+def test_file_source_partition_key():
+    file_path = 'examples/data/lorem_ipsum.txt'
+    source = FileSource(file_path)
+
+    partition_key = source.source_partition_key
+
+    assert partition_key == uuid.uuid5(NAMESPACE_FLUXT, file_path)

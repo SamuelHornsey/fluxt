@@ -59,7 +59,10 @@ class DataStream(DataStreamOperations):
         if not self.sink:
             raise DataStreamException('DataStream sink not defined')
 
-        execution_graph = graph_generator(self.transformations, self.storage)
+        execution_graph = graph_generator(
+            self.transformations,
+            self.storage,
+            self.source.source_partition_key)
 
         for event in self.source.generate():
             event_collection = execution_graph.run(EventCollection(event))

@@ -1,33 +1,44 @@
 import pytest
 
-from fluxt.storage import Memory
+from fluxt.storage.memory import Memory, MemoryPartition
 
 
-@pytest.fixture
-def memory():
-    return Memory()
+def test_start_memory_storage():
+    memory = Memory()
+    assert memory.partitions == {}
 
 
-def test_set_key(memory):
-    memory.set_key('key', 1)
+def test_get_partition():
+    memory = Memory()
+    partition = memory.get_partition('my-partition')
 
-    assert memory.state['key'] == 1
+    assert 'my-partition' in memory.partitions.keys()
+    assert isinstance(partition, MemoryPartition)
 
 
-def test_get_key(memory):
-    memory.set_key('key', 1)
+def test_set_key():
+    memory = Memory()
+    memory.set_key('key', 1, 'my-partition')
+    assert memory.partitions['my-partition'].data
+    assert memory.partitions['my-partition'].data['key'] == 1
 
-    val = memory.get_key('key')
 
-    assert val == 1
+def test_get_key():
+    memory = Memory()
+    memory.set_key('key', 1, 'my-partition')
+
+    value = memory.get_key('key', 'my-partition')
+    assert value == 1
 
     with pytest.raises(KeyError):
-        memory.get_key('test')
+        memory.get_key('test', 'my-partition')
 
 
-def test_reset(memory):
-    memory.set_key('key', 1)
+def test_delete_key():
+    memory = Memory()
+    memory.set_key('key', 1, 'my-partition')
 
-    memory.reset()
+    memory.del_key('key', 'my-partition')
 
-    assert not memory.state
+    with pytest.raises(KeyError):
+        memory.get_key('key', 'my-partition')

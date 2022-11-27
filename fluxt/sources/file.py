@@ -1,4 +1,6 @@
-from fluxt.sources.base import Source
+import uuid
+
+from fluxt.sources.base import Source, NAMESPACE_FLUXT
 
 
 class FileSource(Source):
@@ -11,3 +13,7 @@ class FileSource(Source):
         with open(self.file, 'r', encoding='UTF-8') as f:
             for line in f.readlines():
                 yield line.strip()
+
+    @property
+    def source_partition_key(self):
+        return uuid.uuid5(NAMESPACE_FLUXT, self.file)

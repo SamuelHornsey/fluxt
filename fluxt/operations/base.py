@@ -7,6 +7,7 @@ class Operation(ABC):
     def __init__(self):
         """ base operation init """
         self.storage_backend = None
+        self.storage_partition_key = None
 
     def __call__(self, event_collection):
         """ run process batch execution
@@ -37,3 +38,17 @@ class Operation(ABC):
     def storage(self, storage):
         """ set operation storage class """
         self.storage_backend = storage
+
+    @property
+    def partition_key(self):
+        return self.storage_partition_key
+
+    @partition_key.setter
+    def partition_key(self, partition):
+        self.storage_partition_key = partition
+
+    def storage_set(self, key, value):
+        pass
+
+    def storage_get(self, key):
+        pass

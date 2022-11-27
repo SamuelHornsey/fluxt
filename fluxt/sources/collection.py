@@ -1,4 +1,6 @@
-from fluxt.sources.base import Source
+import uuid
+
+from fluxt.sources.base import Source, NAMESPACE_FLUXT
 
 
 class CollectionSource(Source):
@@ -10,3 +12,8 @@ class CollectionSource(Source):
         """ generate events """
         for event in self.collection:
             yield event
+
+    @property
+    def source_partition_key(self):
+        return uuid.uuid5(NAMESPACE_FLUXT,
+                          str(self.collection))

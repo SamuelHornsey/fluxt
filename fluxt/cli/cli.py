@@ -32,12 +32,12 @@ def submit():
 def about():
     """ show info about fluxt """
     rich.print('\n'
-          f'███████╗██╗     ██╗   ██╗██╗  ██╗████████╗\n'
-          f'██╔════╝██║     ██║   ██║╚██╗██╔╝╚══██╔══╝\n'
-          f'█████╗  ██║     ██║   ██║ ╚███╔╝    ██║   \n'
-          f'██╔══╝  ██║     ██║   ██║ ██╔██╗    ██║   \n'
-          f'██║     ███████╗╚██████╔╝██╔╝ ██╗   ██║   \n'
-          f'╚═╝     ╚══════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   \n\n'
-          f'version: {__version__}\n'
-          f'license: MIT\n'
-          f'source: https://github.com/SamuelHornsey/fluxt\n')
+               f'███████╗██╗     ██╗   ██╗██╗  ██╗████████╗\n'
+               f'██╔════╝██║     ██║   ██║╚██╗██╔╝╚══██╔══╝\n'
+               f'█████╗  ██║     ██║   ██║ ╚███╔╝    ██║   \n'
+               f'██╔══╝  ██║     ██║   ██║ ██╔██╗    ██║   \n'
+               f'██║     ███████╗╚██████╔╝██╔╝ ██╗   ██║   \n'
+               f'╚═╝     ╚══════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   \n\n'
+               f'version: {__version__}\n'
+               f'license: MIT\n'
+               f'source: https://github.com/SamuelHornsey/fluxt\n')

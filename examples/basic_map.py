@@ -5,6 +5,7 @@ import fluxt.operations as operations
 # create a streaming app
 fluxt = Fluxt(name='My Stream Processor')
 
+
 @operations.map()
 def map_processor(event):
     return f'mapped-{event}'
@@ -26,6 +27,6 @@ def stream_processor(datastream):
     datastream.source_from_collection(events)
 
     datastream.filter(filter_processor) \
-          .map(map_processor)
+        .map(map_processor)
 
     datastream.print()

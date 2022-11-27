@@ -1,9 +1,11 @@
 import pytest
+import uuid
 
 from fluxt.app.graph import OperationNode, StreamGraph, \
     graph_generator, GraphException
 from fluxt.operations import FilterFunction, MapFunction, \
     ReducerFunction, KeyByFunction
+from fluxt.sources.base import NAMESPACE_FLUXT
 from fluxt.app.events import EventCollection
 from fluxt.storage import Memory
 
@@ -34,17 +36,20 @@ def storage():
 
 
 def test_stream_graph_generator(storage):
-    graph = graph_generator([Filter(), Map()], storage)
+    graph = graph_generator([Filter(), Map()], storage,
+                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
     assert isinstance(graph, StreamGraph)
 
 
 def test_stream_graph_repr(storage):
-    graph = graph_generator([Filter(), Map()], storage)
+    graph = graph_generator([Filter(), Map()], storage,
+                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
     assert graph.__repr__() == 'StreamGraph(FilterFunction()->MapFunction())'
 
 
 def test_stream_graph_iter(storage):
-    graph = graph_generator([Filter(), Map()], storage)
+    graph = graph_generator([Filter(), Map()], storage,
+                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
 
     nodes = [node for node in graph]
 
@@ -52,14 +57,15 @@ def test_stream_graph_iter(storage):
     assert nodes[0].operation.type == 'FilterFunction'
     assert nodes[1].operation.type == 'MapFunction'
 
-    graph = graph_generator([Filter(), Map(), Map()], storage)
+    graph = graph_generator([Filter(), Map(), Map()],
+                            storage, uuid.uuid5(NAMESPACE_FLUXT, 'test'))
     nodes = [node for node in graph]
 
     assert len(nodes) == 3
 
 
 def test_stream_graph_add_node(storage):
-    graph = StreamGraph(storage)
+    graph = StreamGraph(storage, uuid.uuid5(NAMESPACE_FLUXT, 'test'))
     graph.add_node(Filter())
 
     assert graph.head
@@ -75,7 +81,8 @@ def test_stream_graph_add_node(storage):
 
 def test_stream_graph_run(storage):
     event = {'test': 'event'}
-    graph = graph_generator([Map(), Filter()], storage)
+    graph = graph_generator([Map(), Filter()], storage,
+                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
 
     event_collection = graph.run(EventCollection(event))
 
@@ -90,7 +97,8 @@ def test_stream_graph_run_empty_events(storage):
         def filter(self, event):
             return False
 
-    graph = graph_generator([FilterAll()], storage)
+    graph = graph_generator([FilterAll()], storage,
+                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
 
     event_collection = graph.run(EventCollection(event))
 

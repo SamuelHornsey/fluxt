@@ -1,2 +1,2 @@
 from fluxt.storage.memory import Memory
-from fluxt.storage.local import LocalDatabase
+from fluxt.storage.rocks import RocksDB
