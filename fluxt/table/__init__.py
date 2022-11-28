@@ -1,0 +1,1 @@
+from fluxt.table.table import Table

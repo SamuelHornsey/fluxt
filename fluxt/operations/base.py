@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from fluxt.table import Table
+
 
 class Operation(ABC):
     """ base operation """
@@ -47,8 +49,6 @@ class Operation(ABC):
     def partition_key(self, partition):
         self.storage_partition_key = partition
 
-    def storage_set(self, key, value):
-        self.storage_backend.set_key(key, value, self.partition_key)
-
-    def storage_get(self, key):
-        return self.storage_backend.get_key(key, self.partition_key)
+    # TODO: improve
+    def setup_node(self):
+        self.table = Table(self.partition_key)

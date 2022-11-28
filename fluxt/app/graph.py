@@ -76,6 +76,9 @@ class StreamGraph(object):
         # set node partition key
         new_node.operation.partition_key = self.partition_key
 
+        # TODO: improve this
+        new_node.operation.setup_node()
+
         if not self.head:
             self.head = new_node
             return
@@ -85,6 +88,7 @@ class StreamGraph(object):
         for node in self:
             last = node
 
+        # TODO: make more generic/potentially remove
         if new_node.operation.type == 'ReducerFunction' \
                 and last.operation.type != 'KeyByFunction':
             raise GraphException(f'{new_node.operation.type} must be '

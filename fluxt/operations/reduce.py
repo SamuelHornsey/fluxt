@@ -5,8 +5,8 @@ from fluxt.operations.base import Operation
 
 def reducer_function_generator(func):
     class TempReducer(ReducerFunction):
-        def reduce(self, key, reduced, event):
-            return func(key, reduced, event)
+        def reduce(self, event, state):
+            return func(event, state)
 
     return TempReducer()
 
@@ -24,20 +24,9 @@ class ReducerFunction(Operation):
             batch (list): list of modified events
         """
         batch = []
+        print(self.table, self.table.state, self.table.change_log)
         for event in events:
-            key, value = event
-
-            # attempt collect reduced
-            try:
-                reduced = self.storage_get(key)
-            except KeyError:
-                reduced = None
-
-            reduced = self.reduce(key, reduced, value)
-
-            self.storage_set(key, reduced)
-            batch.append((key, reduced))
-
+            batch.append(self.reduce(event, self.table))
         return batch
 
     @property
@@ -46,6 +35,6 @@ class ReducerFunction(Operation):
         return self.__class__.__base__.__name__
 
     @abstractmethod
-    def reduce(self, key, reduced, event):
+    def reduce(self, event, state):
         """ abstract reducer """
-        return key, event
+        return event
