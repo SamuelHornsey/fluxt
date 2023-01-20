@@ -56,7 +56,7 @@ class FloatEncoder(BaseEncoder):
     def _dumps(self, data):
         return str(data).encode('utf-8')
 
-    def _load(self, raw):
+    def _loads(self, raw):
         return float(raw.decode())
 
     def validate(self, data):
