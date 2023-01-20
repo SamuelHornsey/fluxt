@@ -2,7 +2,7 @@ class GraphException(Exception):
     pass
 
 
-def graph_generator(transformations, storage, partition_key):
+def graph_generator(transformations):
     """ generate a stream execution graph
 
     Args:
@@ -14,7 +14,7 @@ def graph_generator(transformations, storage, partition_key):
     if not transformations:
         raise GraphException('no transformations defined')
 
-    graph = StreamGraph(storage, partition_key)
+    graph = StreamGraph()
 
     for operation in transformations:
         graph.add_node(operation)
@@ -25,11 +25,10 @@ def graph_generator(transformations, storage, partition_key):
 class StreamGraph(object):
     """ represent the streaming process graph """
 
-    def __init__(self, storage, partition_key):
+    def __init__(self):
         """ init graph """
         self.head = None
-        self.storage = storage
-        self.partition_key = partition_key
+        self.num_nodes = 0
 
     def __iter__(self):
         """ iterator for graph nodes
@@ -68,19 +67,10 @@ class StreamGraph(object):
         Args:
             operation (object): operation node
         """
-        new_node = OperationNode(operation)
-
-        # set storage backend
-        new_node.operation.storage = self.storage
-
-        # set node partition key
-        new_node.operation.partition_key = self.partition_key
-
-        # TODO: improve this
-        new_node.operation.setup_node()
+        self.num_nodes = self.num_nodes + 1
 
         if not self.head:
-            self.head = new_node
+            self.head = operation
             return
 
         last = None
@@ -88,38 +78,20 @@ class StreamGraph(object):
         for node in self:
             last = node
 
-        # TODO: make more generic/potentially remove
-        if new_node.operation.type == 'ReducerFunction' \
-                and last.operation.type != 'KeyByFunction':
-            raise GraphException(f'{new_node.operation.type} must be '
-                                 'preceeded by a KeyByFunction node')
+        last.next = operation
 
-        last.next = new_node
-
-    def run(self, event_collection):
+    def run(self, event):
         """ run graph by looping through each node and
             processing the event collection
 
         Args:
             event (event): event object
         """
+        batch = [event]
         for node in self:
-            event_collection = node.process(event_collection)
+            batch = node.process_batch(batch)
 
-            if not event_collection:
+            if not batch:
                 break
 
-        return event_collection
-
-
-class OperationNode(object):
-    """ represent an operation as a node """
-
-    def __init__(self, operation):
-        """ init node """
-        self.operation = operation
-        self.next = None
-
-    def process(self, event_collection):
-        """ run operation over event """
-        return self.operation(event_collection)
+        return batch

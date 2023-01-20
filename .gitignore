@@ -13,3 +13,4 @@ output.txt
 dist
 *.egg-info
 build
+scratch

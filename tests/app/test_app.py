@@ -1,13 +1,7 @@
 import pytest
 
-from fluxt.app import Fluxt
-from fluxt.operations import MapFunction
-from fluxt.app.graph import GraphException
-
-
-class Map(MapFunction):
-    def map(self, event):
-        return super().map(event)
+from fluxt import Fluxt
+from fluxt.state import State
 
 
 @pytest.fixture()
@@ -19,43 +13,51 @@ def test_repr(app):
     assert app.__repr__() == 'Fluxt(name="Test Streaming App")'
 
 
+def test_state(app):
+    state = app.State('my_state', default=0)
+
+    assert isinstance(state, State)
+
+
+def test_operation(app):
+    @app.operation()
+    def my_handler(event, output):
+        pass
+
+    assert isinstance(my_handler, tuple)
+    assert my_handler[1] is None
+
+    state = app.State('test_state', default=0)
+
+    @app.operation(state=state)
+    def my_handler(event, output, state):
+        pass
+
+    assert isinstance(my_handler, tuple)
+    assert my_handler[1] == state
+
+
 def test_stream(app):
     @app.stream()
     def stream(ds):
-        ds.source_from_collection([1, 2, 3])
-        ds.print()
+        pass
 
-    assert len(app.agents) == 1
-
-    @app.stream()
-    def stream_agent(ds):
-        ds.source_from_collection([1, 2, 3])
-        ds.print()
-
-    assert len(app.agents) == 2
-
-
-def test_run_no_transformations(app):
-    @app.stream()
-    def stream(ds):
-        ds.source_from_collection([1, 2, 3])
-        ds.print()
-
-    with pytest.raises(GraphException) as e:
-        app.run()
-
-    assert 'no transformations defined' in str(e)
+    assert len(app.stream_processors) == 1
+    assert isinstance(app.stream_processors[0], tuple)
 
 
 def test_run(app, capsys):
+    @app.operation()
+    def null_operation(event, output):
+        output.send(event)
+
     @app.stream()
     def stream(ds):
-        ds.source_from_collection([1, 2, 3])
+        ds.source_from_collection(['test'])
+        ds.pipeline(null_operation)
         ds.print()
-
-        ds.map(Map())
 
     app.run()
     out, err = capsys.readouterr()
 
-    assert ['1', '2', '3'] == out.split()
+    assert 'test' in out.split()

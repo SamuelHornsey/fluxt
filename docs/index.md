@@ -26,30 +26,42 @@ Here is a basic streaming mapping job example;
 
 ```python
 from fluxt import Fluxt
+from fluxt.storage import LevelStore
 
-import fluxt.operations as operations
 
-fluxt = Fluxt()
+# create a streaming app
+fluxt = Fluxt(name='basic_reduce')
 
-@operations.map()
-def map_event(event):
-    return f'my-fluxt-event-{event}'
+word_count = fluxt.State('word_count', default=0,
+                store=LevelStore('/tmp/data'))
+
+
+@fluxt.operation()
+def tokenize(event, output):
+    for word in event.lower().split():
+        output.send(word)
+
+
+@fluxt.operation(state=word_count)
+def count(event, output, state):
+    state[event] += 1
+    output.send((event, state[event]))
+
 
 @fluxt.stream()
-def stream_processor(datastream):
-    # set some events
-    events = ['event1', 'event2', 'event3']
+def word_count_processor(datastream):
+    events = ['welcome', 'to', 'fluxt!',
+                'The', 'python', 'streaming framework']
 
-    # add events from source
     datastream.source_from_collection(events)
 
-    # create a pipeline
-    datastream.pipeline(map_event)
+    datastream.pipeline(tokenize, count)
 
-    # output results to stdout
     datastream.print()
 
+
 if __name__ == '__main__':
+    # run the fluxt app
     fluxt.run()
 ```
 

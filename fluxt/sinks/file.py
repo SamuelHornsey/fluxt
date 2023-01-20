@@ -1,5 +1,3 @@
-import sys
-
 from fluxt.sinks.base import Sink
 
 
@@ -9,7 +7,7 @@ class FileSink(Sink):
         self.destination = destination
         self.file = open(self.destination, 'w')
 
-    def pipe(self, event_collection):
+    def pipe(self, batch):
         """ pipe event to file output """
-        for event in event_collection.events:
+        for event in batch:
             self.file.write(f'{event}\n')

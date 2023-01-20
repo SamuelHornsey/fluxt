@@ -4,7 +4,7 @@ from fluxt.sinks.base import Sink
 
 
 class StdoutSink(Sink):
-    def pipe(self, event_collection):
+    def pipe(self, batch):
         """ send event to stdout """
-        for event in event_collection.events:
+        for event in batch:
             sys.stdout.write('%s\n' % str(event))
