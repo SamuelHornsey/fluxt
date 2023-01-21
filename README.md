@@ -53,3 +53,9 @@ if __name__ == '__main__':
     # run the fluxt app
     fluxt.run()
 ```
+
+### Installing Plyvel on Mac
+
+```sh
+CFLAGS='-g -stdlib=libc++ -std=c++11 -fno-rtti' pip install --force-reinstall --global-option="build_ext" --global-option="-I/usr/local/include" --global-option="-L/usr/local/lib" plyvel
+```
