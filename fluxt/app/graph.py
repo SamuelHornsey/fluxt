@@ -58,7 +58,7 @@ class StreamGraph(object):
 
     def __repr__(self):
         """ print graph """
-        nodes = [f'{node.operation.type}()' for node in self]
+        nodes = [f'{node.__class__.__name__}()' for node in self]
         return f'StreamGraph({"->".join(nodes)})'
 
     def add_node(self, operation):

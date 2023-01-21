@@ -9,11 +9,11 @@ TYPE_ENCODER_MAP = {
 
 
 def get_type_encoder(type_key):
-    if type(type_key) == str:
+    if isinstance(type_key, str) and TYPE_ENCODER_MAP.get(type_key):
         return TYPE_ENCODER_MAP[type_key]
 
-    if isinstance(type_key, type):
+    if isinstance(type_key, type) and TYPE_ENCODER_MAP.get(type_key.__name__):
         return TYPE_ENCODER_MAP[type_key.__name__]
 
     raise encoders.EncoderError(
-            f'no available encoder for type {type_key}')
+        f'no available encoder for type {type_key}')

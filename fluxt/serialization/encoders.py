@@ -36,7 +36,7 @@ class IntEncoder(BaseEncoder):
         return int(raw.decode())
 
     def validate(self, data):
-        if not type(data) == int:
+        if not isinstance(data, int):
             raise EncoderError(f'{type(data)} is not int')
 
 
@@ -48,7 +48,7 @@ class StrEncoder(BaseEncoder):
         return str(raw.decode())
 
     def validate(self, data):
-        if not type(data) == str:
+        if not isinstance(data, str):
             raise EncoderError(f'{type(data)} is not str')
 
 
@@ -60,5 +60,5 @@ class FloatEncoder(BaseEncoder):
         return float(raw.decode())
 
     def validate(self, data):
-        if not type(data) == float:
+        if not isinstance(data, float):
             raise EncoderError(f'{type(data)} is not float')

@@ -1,5 +1,6 @@
 from fluxt.batch import BatchOutput
 
+
 class Operation:
     """ operation handler class """
 
