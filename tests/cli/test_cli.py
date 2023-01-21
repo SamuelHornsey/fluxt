@@ -1,7 +1,7 @@
 import importlib
 
 from fluxt import __version__
-from fluxt.cli.cli import run, about
+from fluxt.cli import run, about
 
 
 class MockApp():

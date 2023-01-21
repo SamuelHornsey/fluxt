@@ -15,39 +15,36 @@ This is a new project that is in very early development stages. This project aim
 
 ```python
 from fluxt import Fluxt
-import fluxt.operations as operations
+from fluxt.storage import LevelStore
+
 
 # create a streaming app
-fluxt = Fluxt(name='Word Count')
+fluxt = Fluxt(name='basic_reduce')
+
+word_count = fluxt.State('word_count', default=0,
+                store=LevelStore('/tmp/data'))
 
 
-@operations.flat_map()
-def tokenizer(event):
-    return event.lower().split()
+@fluxt.operation()
+def tokenize(event, output):
+    for word in event.lower().split():
+        output.send(word)
 
 
-@operations.key_by()
-def key(event):
-    return event, 1
-
-
-@operations.reducer()
-def count(key, reduced, event):
-    if reduced is None:
-        return 1
-    return reduced + event
+@fluxt.operation(state=word_count)
+def count(event, output, state):
+    state[event] += 1
+    output.send((event, state[event]))
 
 
 @fluxt.stream()
-def stream_processor(datastream):
+def word_count_processor(datastream):
     events = ['welcome', 'to', 'fluxt!',
                 'The', 'python', 'streaming framework']
 
     datastream.source_from_collection(events)
 
-    datastream.flat_map(tokenizer) \
-        .key_by(key) \
-        .reduce(count)
+    datastream.pipeline(tokenize, count)
 
     datastream.print()
 
@@ -55,4 +52,10 @@ def stream_processor(datastream):
 if __name__ == '__main__':
     # run the fluxt app
     fluxt.run()
+```
+
+### Installing Plyvel on Mac
+
+```sh
+CFLAGS='-g -stdlib=libc++ -std=c++11 -fno-rtti' pip install --force-reinstall --global-option="build_ext" --global-option="-I/usr/local/include" --global-option="-L/usr/local/lib" plyvel
 ```

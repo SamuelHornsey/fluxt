@@ -1,2 +1,1 @@
-from fluxt.storage.memory import Memory
-from fluxt.storage.rocks import RocksDB
+from fluxt.storage.level import LevelStore

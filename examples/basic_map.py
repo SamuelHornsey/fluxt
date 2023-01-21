@@ -1,22 +1,23 @@
+import logging
+
 from fluxt import Fluxt
 
-import fluxt.operations as operations
+# setting logging level to debug
+logging.basicConfig(level=logging.DEBUG)
 
 # create a streaming app
 fluxt = Fluxt(name='My Stream Processor')
 
 
-@operations.map()
-def map_processor(event):
-    return f'mapped-{event}'
+@fluxt.operation()
+def map_events(event, output):
+    output.send(f'mapped-{event}')
 
 
-@operations.filter()
-def filter_processor(event):
+@fluxt.operation()
+def filter_events(event, output):
     if 'event' in event:
-        return True
-
-    return False
+        output.send(event)
 
 
 @fluxt.stream()
@@ -26,7 +27,6 @@ def stream_processor(datastream):
 
     datastream.source_from_collection(events)
 
-    datastream.filter(filter_processor) \
-        .map(map_processor)
+    datastream.pipeline(filter_events, map_events)
 
     datastream.print()

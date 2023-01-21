@@ -1,115 +1,48 @@
 import pytest
-import uuid
 
-from fluxt.app.graph import OperationNode, StreamGraph, \
-    graph_generator, GraphException
-from fluxt.operations import FilterFunction, MapFunction, \
-    ReducerFunction, KeyByFunction
-from fluxt.sources.base import NAMESPACE_FLUXT
-from fluxt.app.events import EventCollection
-from fluxt.storage import Memory
-
-
-class Map(MapFunction):
-    def map(self, event):
-        return super().map(event)
-
-
-class Filter(FilterFunction):
-    def filter(self, event):
-        return super().filter(event)
-
-
-class Reducer(ReducerFunction):
-    def reduce(self, accumalator, event):
-        pass
-
-
-class KeyBy(KeyByFunction):
-    def key_by(self, event):
-        return super().key_by(event)
+from fluxt import Fluxt
+from fluxt.app.datastream import DataStream
+from fluxt.app.graph import StreamGraph, GraphException, graph_generator
 
 
 @pytest.fixture()
-def storage():
-    return Memory()
+def app():
+    return Fluxt('Test App')
 
 
-def test_stream_graph_generator(storage):
-    graph = graph_generator([Filter(), Map()], storage,
-                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
-    assert isinstance(graph, StreamGraph)
-
-
-def test_stream_graph_repr(storage):
-    graph = graph_generator([Filter(), Map()], storage,
-                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
-    assert graph.__repr__() == 'StreamGraph(FilterFunction()->MapFunction())'
-
-
-def test_stream_graph_iter(storage):
-    graph = graph_generator([Filter(), Map()], storage,
-                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
-
-    nodes = [node for node in graph]
-
-    assert len(nodes) == 2
-    assert nodes[0].operation.type == 'FilterFunction'
-    assert nodes[1].operation.type == 'MapFunction'
-
-    graph = graph_generator([Filter(), Map(), Map()],
-                            storage, uuid.uuid5(NAMESPACE_FLUXT, 'test'))
-    nodes = [node for node in graph]
-
-    assert len(nodes) == 3
-
-
-def test_stream_graph_add_node(storage):
-    graph = StreamGraph(storage, uuid.uuid5(NAMESPACE_FLUXT, 'test'))
-    graph.add_node(Filter())
-
-    assert graph.head
-    assert graph.head.next is None
-
-    graph.add_node(Map())
-
-    assert graph.head.next
-
+def test_graph_generator(app):
     with pytest.raises(GraphException):
-        graph.add_node(Reducer())
+        graph = graph_generator([])
+
+    @app.operation()
+    def my_handler(event, output):
+        pass
+
+    ds = DataStream('my datastream', {})
+    ds.pipeline(my_handler)
+
+    graph = graph_generator(ds.operations)
+
+    assert graph.num_nodes == 1
+
+    ds.pipeline(my_handler)
+    graph = graph_generator(ds.operations)
+
+    assert graph.num_nodes == 2
 
 
-def test_stream_graph_run(storage):
-    event = {'test': 'event'}
-    graph = graph_generator([Map(), Filter()], storage,
-                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
+def test_graph_repr(app):
+    @app.operation()
+    def my_handler(event, output):
+        pass
 
-    event_collection = graph.run(EventCollection(event))
+    ds = DataStream('my datastream', {})
+    ds.pipeline(my_handler)
+    graph = graph_generator(ds.operations)
 
-    assert len(event_collection.events) == 1
-    assert event_collection.events[0] == event
+    assert graph.__repr__() == 'StreamGraph(Operation())'
 
+    ds.pipeline(my_handler)
+    graph = graph_generator(ds.operations)
 
-def test_stream_graph_run_empty_events(storage):
-    event = {'test': 'event'}
-
-    class FilterAll(FilterFunction):
-        def filter(self, event):
-            return False
-
-    graph = graph_generator([FilterAll()], storage,
-                            uuid.uuid5(NAMESPACE_FLUXT, 'test'))
-
-    event_collection = graph.run(EventCollection(event))
-
-    assert not event_collection
-
-
-def test_operation_node_process():
-    node = OperationNode(Map())
-    event = {'test': 'event'}
-
-    results = node.process(EventCollection(event))
-
-    assert isinstance(results, EventCollection)
-    assert results.event_collection == [event]
+    assert graph.__repr__() == 'StreamGraph(Operation()->Operation())'
