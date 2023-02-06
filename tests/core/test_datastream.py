@@ -1,6 +1,6 @@
 import pytest
 
-from fluxt.app.datastream import DataStream, DataStreamException
+from fluxt.core.datastream import DataStream, DataStreamException
 from fluxt.state import State
 from fluxt.sources.base import Source
 from fluxt.sinks.base import Sink

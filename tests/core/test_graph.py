@@ -1,8 +1,8 @@
 import pytest
 
 from fluxt import Fluxt
-from fluxt.app.datastream import DataStream
-from fluxt.app.graph import StreamGraph, GraphException, graph_generator
+from fluxt.core.datastream import DataStream
+from fluxt.core.graph import GraphException, graph_generator
 
 
 @pytest.fixture()
