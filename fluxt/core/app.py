@@ -1,7 +1,7 @@
 from fluxt.state import State
 from fluxt.storage import LevelStore
 
-from fluxt.app.datastream import DataStream
+from fluxt.core.datastream import DataStream
 
 
 class Fluxt:

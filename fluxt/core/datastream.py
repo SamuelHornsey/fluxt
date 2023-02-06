@@ -3,7 +3,7 @@ from fluxt.sources import CollectionSource
 from fluxt.sinks import StdoutSink
 from fluxt.transaction import TransactionLog
 from fluxt.state import State
-from fluxt.app.graph import graph_generator
+from fluxt.core.graph import graph_generator
 
 
 class DataStreamException(Exception):
